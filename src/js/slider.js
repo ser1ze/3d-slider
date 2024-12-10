@@ -170,33 +170,18 @@ function startSnapToSlide() {
   let closestIndex = Math.round(tX / (360 / aEle.length));
   targetTX = closestIndex * (360 / aEle.length);
 
+  let angleDifference = targetTX - tX;
   let snapInterval = setInterval(function () {
-    let angleDifference = targetTX - tX;
+    angleDifference = targetTX - tX;
     if (Math.abs(angleDifference) < 0.5) {
       tX = targetTX;
+      scrollInProgress = false;
       clearInterval(snapInterval);
-      smoothSpeedIncrease();
     } else {
-      tX += angleDifference * 0.1;
+      tX += angleDifference * 0.2;
       applyTranform(odrag);
     }
   }, 16);
-}
-
-function smoothSpeedIncrease() {
-  let targetRotationSpeed = 0.1;
-  let speedIncrement = 0.001;
-
-  function increaseSpeed() {
-    if (rotationSpeed < targetRotationSpeed) {
-      rotationSpeed += speedIncrement;
-      requestAnimationFrame(increaseSpeed);
-    } else {
-      scrollInProgress = false;
-    }
-  }
-
-  requestAnimationFrame(increaseSpeed);
 }
 
 ospin.addEventListener("wheel", function (e) {
