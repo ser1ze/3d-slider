@@ -1,11 +1,11 @@
 @font-face {
   font-family: "Arial";
-  src: url("/public/fonts/Arial/Arial.woff") format("woff"),
-    url("/public/fonts/Arial/Arial.ttf") format("ttf");
+  src: url("./public/fonts/Arial/Arial.woff") format("woff"),
+    url("./public/fonts/Arial/Arial.ttf") format("ttf");
 }
 @font-face {
   font-family: "ST-SimpleSquare";
-  src: url("/public/fonts/ST-SimpleSquare/ST-SimpleSquare.woff") format("woff");
+  src: url("./public/fonts/ST-SimpleSquare/ST-SimpleSquare.woff") format("woff");
 }
 /* Mixins */
 /* Reset and base styles  */
