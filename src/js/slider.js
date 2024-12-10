@@ -18,18 +18,17 @@ let tX = 0,
   tY = 10;
 let scrollDirection = 1;
 let scrollInProgress = false;
-let rotationSpeed = 0.03; // Начальная скорость прокрутки
+let rotationSpeed = 0.03;
 let isDragging = false;
 let startX = 0;
 let initialTX = tX;
 let lastX = 0;
-let targetTX = tX; // Для плавного замедления и подведения слайдера
+let targetTX = tX;
 
 function applyTranform(obj) {
   obj.style.transform = "rotateX(" + -tY + "deg) rotateY(" + tX + "deg)";
 }
 
-// Инициализация слайдера
 function init() {
   var startIndex = 1;
   for (var i = 0; i < aEle.length; i++) {
@@ -43,7 +42,6 @@ function init() {
   ground.style.height = radius * 3 + "px";
 }
 
-// Плавная анимация вращения
 function startInfiniteRotation() {
   requestAnimationFrame(function animate() {
     if (!scrollInProgress) {
@@ -62,7 +60,6 @@ function startInfiniteRotation() {
   });
 }
 
-// Прокрутка карусели
 function rotateCarousel(index) {
   let angle = index * (360 / aEle.length);
   aEle.forEach((ele, i) => {
@@ -78,7 +75,6 @@ function rotateCarousel(index) {
 
 init();
 
-// Обработчики для кнопок переключения
 document.querySelectorAll(".btn").forEach((button, index) => {
   button.addEventListener("click", function () {
     document.querySelectorAll(".btn").forEach((btn) => {
@@ -129,7 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
   handleClick(3);
 });
 
-// Обработчики для мыши
 odrag.addEventListener("mousedown", function (e) {
   if (e.button === 0) {
     isDragging = true;
@@ -166,14 +161,12 @@ document.addEventListener("mousemove", function (e) {
 
 document.addEventListener("mouseup", function () {
   isDragging = false;
-  startSnapToSlide(); // После отпускания мыши начинаем подводить к слайду
+  startSnapToSlide();
 });
 
-// Подведение к ближайшему слайду с замедлением
 function startSnapToSlide() {
   scrollInProgress = true;
 
-  // Определяем ближайший индекс слайда
   let closestIndex = Math.round(tX / (360 / aEle.length));
   targetTX = closestIndex * (360 / aEle.length);
 
@@ -182,68 +175,43 @@ function startSnapToSlide() {
     if (Math.abs(angleDifference) < 0.5) {
       tX = targetTX;
       clearInterval(snapInterval);
-      smoothSpeedIncrease(); // Плавно увеличиваем скорость после остановки
+      smoothSpeedIncrease();
     } else {
-      tX += angleDifference * 0.1; // Плавно подводим к нужному углу
+      tX += angleDifference * 0.1;
       applyTranform(odrag);
     }
   }, 16);
 }
 
-// Плавное увеличение скорости после снэпа с контролируемым восстановлением
 function smoothSpeedIncrease() {
-  let targetRotationSpeed = 0.1; // Целевая скорость вращения
-  let speedIncrement = 0.001; // Увеличение скорости (медленнее, чем раньше)
+  let targetRotationSpeed = 0.1;
+  let speedIncrement = 0.001;
 
-  // Линейное увеличение скорости до целевой
   function increaseSpeed() {
     if (rotationSpeed < targetRotationSpeed) {
       rotationSpeed += speedIncrement;
       requestAnimationFrame(increaseSpeed);
     } else {
-      scrollInProgress = false; // После достижения цели, продолжаем без пауз
+      scrollInProgress = false;
     }
   }
 
-  // Начинаем плавное увеличение скорости
   requestAnimationFrame(increaseSpeed);
 }
 
-// Дополнительное управление колесиком после снэпа
 ospin.addEventListener("wheel", function (e) {
   var d = e.deltaY || -e.detail;
   scrollDirection = Math.sign(d);
 
-  // Расчет изменений радиуса в зависимости от направления прокрутки
   let deltaRadius = d * 0.2;
   radius += deltaRadius;
 
-  // Ограничиваем радиус для предотвращения слишком маленьких или больших значений
   if (radius < 380) radius = 380;
   if (radius > 600) radius = 600;
 
-  init(); // Перезапуск карусели с новым радиусом
+  init();
 
-  // Останавливаем прокрутку по умолчанию для предотвращения стандартной прокрутки страницы
   if (Math.abs(d) > 0) {
     e.preventDefault();
   }
 });
-
-// После того как пользователь отпускает мышь, начинаем плавно уменьшать скорость и возвращать к начальной анимации
-function stopInfiniteRotation() {
-  scrollInProgress = true;
-
-  // Плавно уменьшаем скорость прокрутки после завершения слайда
-  let slowDownInterval = setInterval(function () {
-    if (rotationSpeed > 0) {
-      rotationSpeed -= 0.0005; // Меньшее уменьшение для плавности
-    }
-
-    // Когда скорость практически нулевая, прекращаем анимацию
-    if (rotationSpeed <= 0) {
-      clearInterval(slowDownInterval);
-      scrollInProgress = false;
-    }
-  }, 50); // Каждые 50 мс уменьшаем скорость
-}
