@@ -1,0 +1,496 @@
+@font-face {
+  font-family: "Arial";
+  src: url("/public/fonts/Arial/Arial.woff") format("woff"),
+    url("/public/fonts/Arial/Arial.ttf") format("ttf");
+}
+@font-face {
+  font-family: "ST-SimpleSquare";
+  src: url("/public/fonts/ST-SimpleSquare/ST-SimpleSquare.woff") format("woff");
+}
+/* Mixins */
+/* Reset and base styles  */
+* {
+  padding: 0px;
+  margin: 0px;
+  border: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a,
+a:visited {
+  text-decoration: none;
+  display: block;
+}
+
+a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+/* Common */
+aside,
+nav,
+footer,
+header,
+section,
+main {
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+  height: auto;
+}
+
+/* Form */
+input,
+textarea,
+button,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+button,
+input[type="submit"] {
+  display: inline-block;
+  box-shadow: none;
+  background-color: transparent;
+  background: none;
+  cursor: pointer;
+}
+
+input:focus,
+input:active,
+button:focus,
+button:active {
+  outline: none;
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+label {
+  cursor: pointer;
+}
+
+legend {
+  display: block;
+}
+
+.menu-btns {
+  display: flex;
+  justify-content: space-between;
+  width: 1100px;
+  margin: 0 auto;
+  animation: textUp ease-in 0.3s;
+  height: 60px;
+  text-align: center;
+}
+
+.btn {
+  position: relative;
+  display: block;
+  padding: 10px 15px; /* Добавим фиксированный отступ  */
+  font-size: 15px;
+  cursor: pointer;
+  text-align: center;
+  font-family: "Arial";
+}
+.btn:last-child {
+  margin-right: 0;
+}
+
+.btn:hover,
+.btn:active,
+.btn.active {
+  padding: 10px 10px;
+  animation: fadeIn ease-in 0.7s;
+}
+.btn:hover .main-text,
+.btn:active .main-text,
+.btn.active .main-text {
+  color: rgb(55, 119, 157);
+  font-size: 20px; /* Увеличение шрифта при наведении */
+}
+.btn:hover .reflection,
+.btn:active .reflection,
+.btn.active .reflection {
+  top: 130%;
+  animation: fadeIn ease 0.5s;
+  opacity: 1; /* Установка прозрачности отражения */
+}
+
+.btn .main-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 15px;
+  position: relative;
+  font-weight: 700;
+  z-index: 2; /* Основной текст выше отраженного */
+  transition: color 0.3s ease, font-size 0.3s ease; /* Плавный переход для цвета и размера текста */
+}
+
+.btn .reflection {
+  position: absolute;
+  top: 150%; /* Размещаем отражение ниже основного текста */
+  left: 0;
+  width: 100%;
+  transform: scaleY(-1); /* Зеркалим отражённый текст по вертикали */
+  transform-origin: top;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 26px;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  background: linear-gradient(0deg, #37779d, #37779d),
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0; /* Изначально скрыто */
+  filter: blur(2px);
+  transition: all 0.3s ease; /* Плавный переход для прозрачности и размытия */
+}
+
+.description-button {
+  width: 300px;
+  height: 50px;
+  margin: 0 auto;
+}
+
+.card-wrap {
+  perspective: 250px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  z-index: 2000;
+  position: relative;
+  margin-top: 5px;
+}
+
+.card {
+  position: relative;
+  width: 300px !important;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  padding: 17px;
+  height: 51px;
+  overflow: hidden;
+  border-radius: 4px;
+  transition: transform 0.5s ease-out;
+  z-index: 1;
+  color: #fff;
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  background: linear-gradient(rgb(144, 15, 55), rgb(144, 15, 55)) padding-box,
+    linear-gradient(
+        90deg,
+        rgb(232, 232, 232),
+        rgb(177, 177, 177) 19%,
+        rgb(232, 232, 232) 50%,
+        rgb(164, 164, 164) 76%,
+        rgb(232, 232, 232)
+      )
+      border-box;
+  background-clip: padding-box, border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+}
+
+.card.fast-click {
+  background: #590620;
+  box-shadow: inset -2px -2px 8px 0 rgba(0, 0, 0, 0.5),
+    inset 2px 2px 8px 0 rgba(0, 0, 0, 0.5);
+  border: 1px solid transparent;
+  background: linear-gradient(#590620, #590620) padding-box,
+    linear-gradient(
+        90deg,
+        rgb(232, 232, 232),
+        rgb(177, 177, 177) 19%,
+        rgb(232, 232, 232) 50%,
+        rgb(164, 164, 164) 76%,
+        rgb(232, 232, 232)
+      )
+      border-box;
+}
+
+.card-content span.fast-click {
+  transform: scale(0.97);
+  transition: all 0.2s ease;
+}
+
+.card:active span.fast-click {
+  transform: scale(0.97);
+  transition: all 0.2s ease;
+}
+
+.card:active span {
+  transform: scale(0.97);
+  transition: all 0.2s ease;
+}
+
+.card::before {
+  background: radial-gradient(
+    250px circle at var(--mouse-x) var(--mouse-y),
+    rgba(199, 199, 199, 0.2196078431),
+    transparent 30%
+  );
+  border-radius: inherit;
+  content: "";
+  height: 100%;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  z-index: 20;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:active {
+  background: #590620;
+  box-shadow: inset -2px -2px 8px 0 rgba(0, 0, 0, 0.5),
+    inset 2px 2px 8px 0 rgba(0, 0, 0, 0.5);
+  border: 1px solid transparent;
+  background: linear-gradient(#590620, #590620) padding-box,
+    linear-gradient(
+        90deg,
+        rgb(232, 232, 232),
+        rgb(177, 177, 177) 19%,
+        rgb(232, 232, 232) 50%,
+        rgb(164, 164, 164) 76%,
+        rgb(232, 232, 232)
+      )
+      border-box;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.card-content span {
+  font-family: "ST-SimpleSquare" !important;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 110%;
+  letter-spacing: 0.06em;
+  text-align: center;
+  background: linear-gradient(
+    140deg,
+    #727272 0%,
+    #b1b1b1 19%,
+    #e8e8e8 50%,
+    #a4a4a4 76%,
+    #424242 100%
+  );
+  background-clip: text;
+  will-change: transform;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  backface-visibility: hidden;
+  transition: none;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+#drag-container,
+#spin-container {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: auto;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform: rotateX(-2deg);
+  transform: rotateX(-2deg);
+}
+
+#drag-container img {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  position: absolute;
+  left: 0%;
+  top: 0;
+  width: 314px;
+  height: 298px;
+  border-radius: 4px;
+  opacity: 0.9;
+  margin-top: -64px;
+}
+
+#drag-container p {
+  font-family: Serif;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%) rotateX(90deg);
+  transform: translate(-50%, -50%) rotateX(90deg);
+  color: #fff;
+}
+
+#ground {
+  width: 900px;
+  height: 900px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%) rotateX(90deg);
+  transform: translate(-50%, -50%) rotateX(90deg);
+}
+
+body {
+  background: #000;
+}
+
+.section-direction {
+  padding: 100px 0;
+}
+
+.direction-row {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Центрирование по вертикали (если нужно) */
+}
+
+.direction-box {
+  position: relative;
+  width: 1100px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.direction-title {
+  display: inline-flex;
+  justify-content: center;
+  font-family: "Arial";
+  font-size: 40px;
+  line-height: 43.2px;
+  color: #cccccc;
+}
+
+.direction-slider {
+  margin: 230px auto 90px;
+}
+
+.direction-desc {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.direction-boxes {
+  position: relative;
+  height: 183px;
+  margin: 37px 0;
+  padding: 30px 0 61px 0;
+  background: linear-gradient(
+    90deg,
+    rgba(29, 29, 29, 0.36) 0%,
+    rgba(131, 131, 131, 0.36) 50%,
+    rgba(29, 29, 29, 0.36) 100%
+  );
+  border: 5px solid; /* Устанавливаем ширину бордера */
+  border-image-source: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    #ffffff 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-image-slice: 1; /* Задаем, как делить изображение (градиент) */
+  border-image-width: 1px; /* Устанавливаем ширину бордера */
+}
+
+.blocks-wrapper {
+  margin: 0 auto;
+  position: relative;
+  width: 1100px;
+  height: 118px;
+  text-align: center;
+  overflow: hidden; /* Скрываем выходящие элементы */
+}
+
+.block {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 400;
+  color: #cccccc;
+  opacity: 0;
+  font-family: "Arial";
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0; /* Уменьшаем прозрачность при сдвиге */
+  }
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%); /* Начинаем слева */
+    opacity: 0; /* Начальная прозрачность */
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1; /* Конечная прозрачность */
+  }
+}
+.slide-in {
+  animation: slideIn 1s ease-in-out forwards;
+}
+
+.slide-left {
+  animation: slideLeft 1.5s ease-in-out forwards;
+}
+
+/*# sourceMappingURL=style.css.map */
