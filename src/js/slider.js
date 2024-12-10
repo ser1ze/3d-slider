@@ -1,4 +1,4 @@
-var radius = 415;
+var radius = 409;
 var imgWidth = 314;
 var imgHeight = 298;
 let currentRotationIndex = 0;
@@ -16,11 +16,20 @@ ground.style.height = radius * 3 + "px";
 
 let tX = 0,
   tY = 10;
-
 let scrollDirection = 1;
+let scrollInProgress = false;
+let rotationSpeed = 0.03; // Начальная скорость прокрутки
+let isDragging = false;
+let startX = 0;
+let initialTX = tX;
+let lastX = 0;
+let targetTX = tX; // Для плавного замедления и подведения слайдера
 
-const fixedRotationSpeed = 0.03;
+function applyTranform(obj) {
+  obj.style.transform = "rotateX(" + -tY + "deg) rotateY(" + tX + "deg)";
+}
 
+// Инициализация слайдера
 function init() {
   var startIndex = 1;
   for (var i = 0; i < aEle.length; i++) {
@@ -32,43 +41,28 @@ function init() {
 
   ground.style.width = radius * 3 + "px";
   ground.style.height = radius * 3 + "px";
-
-  setTimeout(() => {
-    aEle.forEach((ele) => {});
-  }, 100);
-
-  setTimeout(() => {
-    aEle.forEach((ele, i) => {
-      ele.style.transition = "transform 1s ease-out";
-      ele.style.transform = `rotateY(${
-        (i + startIndex) * (360 / aEle.length)
-      }deg) translateZ(${radius}px)`;
-    });
-  }, 200);
 }
 
-function applyTranform(obj) {
-  obj.style.transform = "rotateX(" + -tY + "deg) rotateY(" + tX + "deg)";
-}
-
-let rotationInterval;
-
+// Плавная анимация вращения
 function startInfiniteRotation() {
-  rotationInterval = requestAnimationFrame(function animate() {
-    tX += fixedRotationSpeed * scrollDirection;
+  requestAnimationFrame(function animate() {
+    if (!scrollInProgress) {
+      tX += rotationSpeed * scrollDirection;
 
-    if (tX >= 360) {
-      tX -= 360;
-    } else if (tX < 0) {
-      tX += 360;
+      if (tX >= 360) {
+        tX -= 360;
+      } else if (tX < 0) {
+        tX += 360;
+      }
+
+      applyTranform(odrag);
     }
-
-    applyTranform(odrag);
 
     requestAnimationFrame(animate);
   });
 }
 
+// Прокрутка карусели
 function rotateCarousel(index) {
   let angle = index * (360 / aEle.length);
   aEle.forEach((ele, i) => {
@@ -84,6 +78,7 @@ function rotateCarousel(index) {
 
 init();
 
+// Обработчики для кнопок переключения
 document.querySelectorAll(".btn").forEach((button, index) => {
   button.addEventListener("click", function () {
     document.querySelectorAll(".btn").forEach((btn) => {
@@ -100,12 +95,41 @@ document.querySelectorAll(".btn").forEach((button, index) => {
 });
 
 startInfiniteRotation();
+document.addEventListener("DOMContentLoaded", function () {
+  let buttons = [];
+  let textElements = [];
+  for (let i = 1; i <= 8; i++) {
+    buttons.push(document.getElementById("btn" + i));
+    textElements.push(document.getElementById("text" + i));
+  }
 
-let isDragging = false;
-let startX = 0;
-let initialTX = tX;
-let lastX = 0;
+  function handleClick(index) {
+    textElements.forEach((textElement, i) => {
+      if (i !== index) {
+        if (textElement.classList.contains("slide-in")) {
+          textElement.classList.remove("slide-in");
+          textElement.classList.add("slide-left");
+          textElement.style.opacity = "0.5";
+        }
+      }
+    });
+    let currentTextElement = textElements[index];
+    currentTextElement.classList.remove("slide-left");
+    currentTextElement.classList.add("slide-in");
+    currentTextElement.style.display = "block";
+  }
+  buttons.forEach((button, index) => {
+    button.addEventListener("click", function () {
+      buttons.forEach((btn) => btn.classList.remove("active"));
+      this.classList.add("active");
+      handleClick(index);
+    });
+  });
 
+  handleClick(3);
+});
+
+// Обработчики для мыши
 odrag.addEventListener("mousedown", function (e) {
   if (e.button === 0) {
     isDragging = true;
@@ -136,71 +160,90 @@ document.addEventListener("mousemove", function (e) {
     }
 
     applyTranform(odrag);
-
     lastX = e.clientX;
   }
 });
 
 document.addEventListener("mouseup", function () {
   isDragging = false;
+  startSnapToSlide(); // После отпускания мыши начинаем подводить к слайду
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  let buttons = [];
-  let textElements = [];
-  for (let i = 1; i <= 8; i++) {
-    buttons.push(document.getElementById("btn" + i));
-    textElements.push(document.getElementById("text" + i));
+// Подведение к ближайшему слайду с замедлением
+function startSnapToSlide() {
+  scrollInProgress = true;
+
+  // Определяем ближайший индекс слайда
+  let closestIndex = Math.round(tX / (360 / aEle.length));
+  targetTX = closestIndex * (360 / aEle.length);
+
+  let snapInterval = setInterval(function () {
+    let angleDifference = targetTX - tX;
+    if (Math.abs(angleDifference) < 0.5) {
+      tX = targetTX;
+      clearInterval(snapInterval);
+      smoothSpeedIncrease(); // Плавно увеличиваем скорость после остановки
+    } else {
+      tX += angleDifference * 0.1; // Плавно подводим к нужному углу
+      applyTranform(odrag);
+    }
+  }, 16);
+}
+
+// Плавное увеличение скорости после снэпа с контролируемым восстановлением
+function smoothSpeedIncrease() {
+  let targetRotationSpeed = 0.1; // Целевая скорость вращения
+  let speedIncrement = 0.001; // Увеличение скорости (медленнее, чем раньше)
+
+  // Линейное увеличение скорости до целевой
+  function increaseSpeed() {
+    if (rotationSpeed < targetRotationSpeed) {
+      rotationSpeed += speedIncrement;
+      requestAnimationFrame(increaseSpeed);
+    } else {
+      scrollInProgress = false; // После достижения цели, продолжаем без пауз
+    }
   }
 
-  function handleClick(index) {
-    textElements.forEach((textElement, i) => {
-      if (i !== index) {
-        if (textElement.classList.contains("slide-in")) {
-          textElement.classList.remove("slide-in");
-          textElement.classList.add("slide-left");
-          textElement.style.opacity = "0.5";
-        }
-      }
-    });
-    let currentTextElement = textElements[index];
-    currentTextElement.classList.remove("slide-left");
-    currentTextElement.classList.add("slide-in");
-    currentTextElement.style.display = "block";
-  }
+  // Начинаем плавное увеличение скорости
+  requestAnimationFrame(increaseSpeed);
+}
 
-  buttons.forEach((button, index) => {
-    button.addEventListener("click", function () {
-      buttons.forEach((btn) => btn.classList.remove("active"));
-      this.classList.add("active");
-      handleClick(index);
-    });
-  });
-
-  handleClick(3);
-});
-
-setTimeout(function () {
-  init();
-  startInfiniteRotation();
-}, 500);
-
-startInfiniteRotation();
-
+// Дополнительное управление колесиком после снэпа
 ospin.addEventListener("wheel", function (e) {
   var d = e.deltaY || -e.detail;
-
   scrollDirection = Math.sign(d);
 
+  // Расчет изменений радиуса в зависимости от направления прокрутки
   let deltaRadius = d * 0.2;
   radius += deltaRadius;
 
+  // Ограничиваем радиус для предотвращения слишком маленьких или больших значений
   if (radius < 380) radius = 380;
   if (radius > 600) radius = 600;
 
-  init();
+  init(); // Перезапуск карусели с новым радиусом
 
+  // Останавливаем прокрутку по умолчанию для предотвращения стандартной прокрутки страницы
   if (Math.abs(d) > 0) {
     e.preventDefault();
   }
 });
+
+// После того как пользователь отпускает мышь, начинаем плавно уменьшать скорость и возвращать к начальной анимации
+function stopInfiniteRotation() {
+  scrollInProgress = true;
+
+  // Плавно уменьшаем скорость прокрутки после завершения слайда
+  let slowDownInterval = setInterval(function () {
+    if (rotationSpeed > 0) {
+      rotationSpeed -= 0.0005; // Меньшее уменьшение для плавности
+    }
+
+    // Когда скорость практически нулевая, прекращаем анимацию
+    if (rotationSpeed <= 0) {
+      clearInterval(slowDownInterval);
+      scrollInProgress = false;
+    }
+  }, 50); // Каждые 50 мс уменьшаем скорость
+}

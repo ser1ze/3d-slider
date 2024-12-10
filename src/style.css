@@ -355,8 +355,8 @@ legend {
   position: absolute;
   left: 0%;
   top: 0;
-  width: 314px;
-  height: 298px;
+  width: 310px;
+  height: 214px;
   border-radius: 4px;
   opacity: 0.9;
   margin-top: -64px;
@@ -386,10 +386,6 @@ body {
   background: #000;
 }
 
-.section-direction {
-  padding: 100px 0;
-}
-
 .direction-row {
   display: flex;
   justify-content: center;
@@ -411,9 +407,14 @@ body {
   line-height: 43.2px;
   color: #cccccc;
 }
+#spin-container,
+#drag-container,
+.block {
+  user-select: none; /* Отключает выделение текста только для этих элементов */
+}
 
 .direction-slider {
-  margin: 230px auto 90px;
+  margin: 200px auto 0px;
 }
 
 .direction-desc {
@@ -492,6 +493,15 @@ body {
 
 .slide-left {
   animation: slideLeft 1.5s ease-in-out forwards;
+}
+
+#spin-container img {
+  transition: transform 0.3s ease, filter 0.3s ease;
+  background: rgba(255, 255, 255, 0.21);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(0.8px);
+  -webkit-backdrop-filter: blur(0.8px);
+  border: 1px solid rgba(255, 255, 255, 0.47);
 }
 
 /*# sourceMappingURL=style.css.map */
