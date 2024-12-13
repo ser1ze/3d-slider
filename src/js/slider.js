@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", function () {
   let previousX;
   let slideWidth;
 
+  let rotationDirection = 1;
+  let previousAngle = rotationAngle;
+
   function nav(d) {
     rotationAngle += (360 / carouselItems.length) * d;
     document.querySelector(
@@ -32,10 +35,15 @@ document.addEventListener("DOMContentLoaded", function () {
     if (isDragging) {
       const diff = e.clientX - previousX;
       const slideOffset = diff / slideWidth;
-      if (Math.abs(slideOffset) >= 1) {
-        nav(Math.sign(slideOffset));
-        previousX = e.clientX;
-      }
+
+      rotationDirection = slideOffset > 0 ? 1 : -1;
+
+      rotationAngle += slideOffset * (360 / carouselItems.length) * 3;
+      document.querySelector(
+        ".slider3d_wrap"
+      ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+
+      previousX = e.clientX;
     }
   };
 
@@ -58,6 +66,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let angle = (360 / carouselItems.length) * index;
     rotationAngle = angle;
+
+    rotationDirection = rotationAngle > previousAngle ? 1 : -1;
+    previousAngle = rotationAngle;
+
     document.querySelector(
       ".slider3d_wrap"
     ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
@@ -94,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
   handleClick(0);
 
   function rotateSlider() {
-    rotationAngle += rotationSpeed;
+    rotationAngle += rotationSpeed * rotationDirection;
     document.querySelector(
       ".slider3d_wrap"
     ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
@@ -131,12 +143,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
   createSlider3d();
 });
-
-const style = document.createElement("style");
-style.innerHTML = `
-  .highlight {
-    border: 2px solid #ff9900;
-    box-shadow: 0 0 10px rgba(255, 153, 0, 0.6);
-  }
-`;
-document.head.appendChild(style);
