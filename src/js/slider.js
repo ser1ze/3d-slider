@@ -1,202 +1,165 @@
-var radius = 409;
-var imgWidth = 314;
-var imgHeight = 298;
-let currentRotationIndex = 0;
-var odrag = document.getElementById("drag-container");
-var ospin = document.getElementById("spin-container");
-var aImg = ospin.getElementsByTagName("img");
-var aEle = [...aImg];
-
-ospin.style.width = imgWidth + "px";
-ospin.style.height = imgHeight + "px";
-
-var ground = document.getElementById("ground");
-ground.style.width = radius * 3 + "px";
-ground.style.height = radius * 3 + "px";
-
-let tX = 0,
-  tY = 10;
-let scrollDirection = 1;
-let scrollInProgress = false;
-let rotationSpeed = 0.03;
-let isDragging = false;
-let startX = 0;
-let initialTX = tX;
-let lastX = 0;
-let targetTX = tX;
-
-function applyTranform(obj) {
-  obj.style.transform = "rotateX(" + -tY + "deg) rotateY(" + tX + "deg)";
-}
-
-function init() {
-  var startIndex = 1;
-  for (var i = 0; i < aEle.length; i++) {
-    var angle = (i + startIndex) * (360 / aEle.length);
-    aEle[i].style.transition = "transform 1s ease-out";
-    aEle[i].style.transform =
-      "rotateY(" + angle + "deg) translateZ(" + radius + "px)";
-  }
-
-  ground.style.width = radius * 3 + "px";
-  ground.style.height = radius * 3 + "px";
-}
-
-function startInfiniteRotation() {
-  requestAnimationFrame(function animate() {
-    if (!scrollInProgress) {
-      tX += rotationSpeed * scrollDirection;
-
-      if (tX >= 360) {
-        tX -= 360;
-      } else if (tX < 0) {
-        tX += 360;
-      }
-
-      applyTranform(odrag);
-    }
-
-    requestAnimationFrame(animate);
-  });
-}
-
-function rotateCarousel(index) {
-  let angle = index * (360 / aEle.length);
-  aEle.forEach((ele, i) => {
-    ele.style.transition = "transform 1s ease-out";
-    ele.style.transform = `rotateY(${
-      angle + (i * 360) / aEle.length
-    }deg) translateZ(${radius}px)`;
-  });
-
-  cancelAnimationFrame(rotationInterval);
-  startInfiniteRotation();
-}
-
-init();
-
-document.querySelectorAll(".btn").forEach((button, index) => {
-  button.addEventListener("click", function () {
-    document.querySelectorAll(".btn").forEach((btn) => {
-      btn.classList.remove("active");
-    });
-    button.classList.add("active");
-
-    document.querySelectorAll(".block").forEach((block, idx) => {
-      block.style.display = idx === index ? "block" : "none";
-    });
-
-    rotateCarousel(index);
-  });
-});
-
-startInfiniteRotation();
 document.addEventListener("DOMContentLoaded", function () {
   let buttons = [];
   let textElements = [];
+  let carouselItems = [...document.querySelectorAll(".slider3d_wrap > div")];
+  let imageElements = document.querySelectorAll("div[id^='img']");
+
   for (let i = 1; i <= 8; i++) {
     buttons.push(document.getElementById("btn" + i));
     textElements.push(document.getElementById("text" + i));
   }
 
+  let rotationAngle = 0; // Начальный угол поворота
+  const rotationSpeed = 0.05; // Скорость вращения (медленно)
+  let isDragging = false;
+  let previousX;
+
+  // Функция для плавного переключения карусели
   function handleClick(index) {
-    textElements.forEach((textElement, i) => {
-      if (i !== index) {
-        if (textElement.classList.contains("slide-in")) {
-          textElement.classList.remove("slide-in");
-          textElement.classList.add("slide-left");
-          textElement.style.opacity = "0.5";
-        }
+    textElements.forEach((textElement) => {
+      textElement.classList.remove("slide-in");
+      textElement.classList.add("slide-left");
+      textElement.style.opacity = "0.5";
+      textElement.style.display = "none";
+    });
+
+    textElements[index].classList.remove("slide-left");
+    textElements[index].classList.add("slide-in");
+    textElements[index].style.display = "block";
+    textElements[index].style.opacity = "1";
+
+    carouselItems[index].style.opacity = "1";
+
+    let angle = (360 / carouselItems.length) * index;
+    rotationAngle = angle; // Обновляем угол при клике на кнопку
+    document.querySelector(
+      ".slider3d_wrap"
+    ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+
+    buttons.forEach((btn) => btn.classList.remove("active"));
+    buttons[index].classList.add("active");
+
+    highlightImage(index);
+  }
+
+  function highlightImage(index) {
+    const activeText = textElements[index].textContent.toLowerCase();
+
+    imageElements.forEach((imgElement) => {
+      imgElement.classList.remove("highlight");
+    });
+
+    imageElements.forEach((imgElement) => {
+      const imgId = imgElement.id;
+      const imgName = imgId.replace("img", "").toLowerCase();
+
+      if (activeText.includes(imgName)) {
+        imgElement.classList.add("highlight");
       }
     });
-    let currentTextElement = textElements[index];
-    currentTextElement.classList.remove("slide-left");
-    currentTextElement.classList.add("slide-in");
-    currentTextElement.style.display = "block";
   }
+
   buttons.forEach((button, index) => {
     button.addEventListener("click", function () {
-      buttons.forEach((btn) => btn.classList.remove("active"));
-      this.classList.add("active");
       handleClick(index);
     });
   });
 
-  handleClick(3);
-});
+  handleClick(0);
 
-odrag.addEventListener("mousedown", function (e) {
-  if (e.button === 0) {
+  // Добавляем бесконечную прокрутку без сброса угла
+  function rotateSlider() {
+    rotationAngle += rotationSpeed; // Постоянно увеличиваем угол
+    document.querySelector(
+      ".slider3d_wrap"
+    ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+
+    requestAnimationFrame(rotateSlider); // Рекурсивный вызов для плавного вращения
+  }
+
+  rotateSlider(); // Стартуем непрерывное вращение
+
+  // Функция для навигации при перетаскивании
+  function nav(d) {
+    rotationAngle += (360 / carouselItems.length) * d;
+    document.querySelector(
+      ".slider3d_wrap"
+    ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+  }
+
+  // Обработчики событий для перетаскивания
+  const onMouseDown = (e) => {
     isDragging = true;
-    startX = e.clientX;
-    initialTX = tX;
-    lastX = e.clientX;
+    previousX = e.clientX;
     e.preventDefault();
+  };
+
+  const onMouseMove = (e) => {
+    if (isDragging) {
+      const diff = e.clientX - previousX;
+      const slideOffset = diff / slideWidth;
+      if (Math.abs(slideOffset) >= 1) {
+        nav(Math.sign(slideOffset)); // Вращаем карусель
+        previousX = e.clientX;
+      }
+    }
+  };
+
+  const onMouseUpOrLeave = () => {
+    isDragging = false; // Останавливаем вращение
+  };
+
+  // Слушатели событий
+  const slider = document.querySelector(".slider3d");
+  slider.addEventListener("mousedown", onMouseDown);
+  slider.addEventListener("mousemove", onMouseMove);
+  slider.addEventListener("mouseup", onMouseUpOrLeave);
+  slider.addEventListener("mouseleave", onMouseUpOrLeave);
+});
+
+const style = document.createElement("style");
+style.innerHTML = `
+  .highlight {
+    border: 2px solid #ff9900;
+    box-shadow: 0 0 10px rgba(255, 153, 0, 0.6);
   }
-});
+`;
+document.head.appendChild(style);
 
-document.addEventListener("mousemove", function (e) {
-  if (isDragging) {
-    let diffX = e.clientX - startX;
-    let movementX = e.clientX - lastX;
+let slideWidth;
 
-    if (movementX > 0) {
-      scrollDirection = 1;
-    } else if (movementX < 0) {
-      scrollDirection = -1;
-    }
+function createSlider3d() {
+  const slider = document.querySelector(".slider3d");
+  const wrap = slider.querySelector(".slider3d_wrap");
+  const all = wrap.children.length;
+  const gCS = window.getComputedStyle(slider);
+  const width = parseInt(gCS.width);
+  slideWidth = width / all;
+  const myR = (width / (2 * Math.tan(Math.PI / all))) * 0.95;
+  const step = 360 / all;
+  let angle = 0;
 
-    tX = initialTX + diffX * 0.3;
-
-    if (tX >= 360) {
-      tX -= 360;
-    } else if (tX < 0) {
-      tX += 360;
-    }
-
-    applyTranform(odrag);
-    lastX = e.clientX;
+  // Устанавливаем начальные трансформации для всех элементов
+  for (let i = 0; i < all; i++) {
+    const rad = (i * step * Math.PI) / 180;
+    wrap.children[i].style.transform = `translate3d(${
+      myR * Math.sin(rad)
+    }px, 0, ${myR * Math.cos(rad)}px) rotateY(${i * step}deg)`;
   }
-});
 
-document.addEventListener("mouseup", function () {
-  isDragging = false;
-  startSnapToSlide();
-});
+  // Функция навигации
+  function nav(d) {
+    angle += step * d;
+    wrap.style.transform = `translateZ(${-myR}px) rotateY(${angle}deg)`;
+  }
 
-function startSnapToSlide() {
-  scrollInProgress = true;
+  // Слушатели событий
+  slider.addEventListener("mousedown", onMouseDown);
+  slider.addEventListener("mousemove", onMouseMove);
+  slider.addEventListener("mouseup", onMouseUpOrLeave);
+  slider.addEventListener("mouseleave", onMouseUpOrLeave);
 
-  let closestIndex = Math.round(tX / (360 / aEle.length));
-  targetTX = closestIndex * (360 / aEle.length);
-
-  let angleDifference = targetTX - tX;
-  let snapInterval = setInterval(function () {
-    angleDifference = targetTX - tX;
-    if (Math.abs(angleDifference) < 0.5) {
-      tX = targetTX;
-      scrollInProgress = false;
-      clearInterval(snapInterval);
-    } else {
-      tX += angleDifference * 0.2;
-      applyTranform(odrag);
-    }
-  }, 16);
+  nav(0);
 }
 
-ospin.addEventListener("wheel", function (e) {
-  var d = e.deltaY || -e.detail;
-  scrollDirection = Math.sign(d);
-
-  let deltaRadius = d * 0.2;
-  radius += deltaRadius;
-
-  if (radius < 380) radius = 380;
-  if (radius > 600) radius = 600;
-
-  init();
-
-  if (Math.abs(d) > 0) {
-    e.preventDefault();
-  }
-});
+window.addEventListener("load", createSlider3d);
