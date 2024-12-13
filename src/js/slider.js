@@ -13,6 +13,35 @@ document.addEventListener("DOMContentLoaded", function () {
   const rotationSpeed = 0.05;
   let isDragging = false;
   let previousX;
+  let slideWidth;
+
+  function nav(d) {
+    rotationAngle += (360 / carouselItems.length) * d;
+    document.querySelector(
+      ".slider3d_wrap"
+    ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+  }
+
+  const onMouseDown = (e) => {
+    isDragging = true;
+    previousX = e.clientX;
+    e.preventDefault();
+  };
+
+  const onMouseMove = (e) => {
+    if (isDragging) {
+      const diff = e.clientX - previousX;
+      const slideOffset = diff / slideWidth;
+      if (Math.abs(slideOffset) >= 1) {
+        nav(Math.sign(slideOffset));
+        previousX = e.clientX;
+      }
+    }
+  };
+
+  const onMouseUpOrLeave = () => {
+    isDragging = false;
+  };
 
   function handleClick(index) {
     textElements.forEach((textElement) => {
@@ -26,8 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
     textElements[index].classList.add("slide-in");
     textElements[index].style.display = "block";
     textElements[index].style.opacity = "1";
-
-    carouselItems[index].style.opacity = "1";
 
     let angle = (360 / carouselItems.length) * index;
     rotationAngle = angle;
@@ -77,40 +104,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
   rotateSlider();
 
-  и;
-  function nav(d) {
-    rotationAngle += (360 / carouselItems.length) * d;
-    document.querySelector(
-      ".slider3d_wrap"
-    ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
-  }
-
-  const onMouseDown = (e) => {
-    isDragging = true;
-    previousX = e.clientX;
-    e.preventDefault();
-  };
-
-  const onMouseMove = (e) => {
-    if (isDragging) {
-      const diff = e.clientX - previousX;
-      const slideOffset = diff / slideWidth;
-      if (Math.abs(slideOffset) >= 1) {
-        nav(Math.sign(slideOffset));
-        previousX = e.clientX;
-      }
-    }
-  };
-
-  const onMouseUpOrLeave = () => {
-    isDragging = false;
-  };
-
   const slider = document.querySelector(".slider3d");
   slider.addEventListener("mousedown", onMouseDown);
   slider.addEventListener("mousemove", onMouseMove);
   slider.addEventListener("mouseup", onMouseUpOrLeave);
   slider.addEventListener("mouseleave", onMouseUpOrLeave);
+
+  function createSlider3d() {
+    const wrap = document.querySelector(".slider3d_wrap");
+    const all = wrap.children.length;
+    const gCS = window.getComputedStyle(document.querySelector(".slider3d"));
+    const width = parseInt(gCS.width);
+    slideWidth = width / all;
+    const myR = (width / (2 * Math.tan(Math.PI / all))) * 0.95;
+    const step = 360 / all;
+
+    for (let i = 0; i < all; i++) {
+      const rad = (i * step * Math.PI) / 180;
+      wrap.children[i].style.transform = `translate3d(${
+        myR * Math.sin(rad)
+      }px, 0, ${myR * Math.cos(rad)}px) rotateY(${i * step}deg)`;
+    }
+
+    nav(0);
+  }
+
+  createSlider3d();
 });
 
 const style = document.createElement("style");
@@ -121,38 +140,3 @@ style.innerHTML = `
   }
 `;
 document.head.appendChild(style);
-
-let slideWidth;
-
-function createSlider3d() {
-  const slider = document.querySelector(".slider3d");
-  const wrap = slider.querySelector(".slider3d_wrap");
-  const all = wrap.children.length;
-  const gCS = window.getComputedStyle(slider);
-  const width = parseInt(gCS.width);
-  slideWidth = width / all;
-  const myR = (width / (2 * Math.tan(Math.PI / all))) * 0.95;
-  const step = 360 / all;
-  let angle = 0;
-
-  for (let i = 0; i < all; i++) {
-    const rad = (i * step * Math.PI) / 180;
-    wrap.children[i].style.transform = `translate3d(${
-      myR * Math.sin(rad)
-    }px, 0, ${myR * Math.cos(rad)}px) rotateY(${i * step}deg)`;
-  }
-
-  function nav(d) {
-    angle += step * d;
-    wrap.style.transform = `translateZ(${-myR}px) rotateY(${angle}deg)`;
-  }
-
-  slider.addEventListener("mousedown", onMouseDown);
-  slider.addEventListener("mousemove", onMouseMove);
-  slider.addEventListener("mouseup", onMouseUpOrLeave);
-  slider.addEventListener("mouseleave", onMouseUpOrLeave);
-
-  nav(0);
-}
-
-window.addEventListener("load", createSlider3d);

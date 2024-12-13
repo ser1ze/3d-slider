@@ -597,12 +597,6 @@ input::selection {
   scroll-behavior: smooth;
 }
 
-.carousel-element {
-  flex-shrink: 0;
-  width: 100%;
-  scroll-snap-align: start;
-  height: 100%;
-}
 .slider3d_wrap img {
   width: 310px;
   height: 214px;
