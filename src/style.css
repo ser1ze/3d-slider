@@ -593,14 +593,14 @@ input::selection {
 .carousel-container {
   display: flex;
   overflow: hidden;
-  scroll-snap-type: x mandatory; /* Для привязки элементов */
-  scroll-behavior: smooth; /* Плавная прокрутка */
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
 }
 
 .carousel-element {
   flex-shrink: 0;
-  width: 100%; /* Должен быть фиксированный размер */
-  scroll-snap-align: start; /* Привязка каждого элемента */
+  width: 100%;
+  scroll-snap-align: start;
   height: 100%;
 }
 .slider3d_wrap img {

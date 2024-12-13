@@ -9,12 +9,11 @@ document.addEventListener("DOMContentLoaded", function () {
     textElements.push(document.getElementById("text" + i));
   }
 
-  let rotationAngle = 0; // Начальный угол поворота
-  const rotationSpeed = 0.05; // Скорость вращения (медленно)
+  let rotationAngle = 0;
+  const rotationSpeed = 0.05;
   let isDragging = false;
   let previousX;
 
-  // Функция для плавного переключения карусели
   function handleClick(index) {
     textElements.forEach((textElement) => {
       textElement.classList.remove("slide-in");
@@ -31,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     carouselItems[index].style.opacity = "1";
 
     let angle = (360 / carouselItems.length) * index;
-    rotationAngle = angle; // Обновляем угол при клике на кнопку
+    rotationAngle = angle;
     document.querySelector(
       ".slider3d_wrap"
     ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
@@ -67,19 +66,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   handleClick(0);
 
-  // Добавляем бесконечную прокрутку без сброса угла
   function rotateSlider() {
-    rotationAngle += rotationSpeed; // Постоянно увеличиваем угол
+    rotationAngle += rotationSpeed;
     document.querySelector(
       ".slider3d_wrap"
     ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
 
-    requestAnimationFrame(rotateSlider); // Рекурсивный вызов для плавного вращения
+    requestAnimationFrame(rotateSlider);
   }
 
-  rotateSlider(); // Стартуем непрерывное вращение
+  rotateSlider();
 
-  // Функция для навигации при перетаскивании
+  и;
   function nav(d) {
     rotationAngle += (360 / carouselItems.length) * d;
     document.querySelector(
@@ -87,7 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
   }
 
-  // Обработчики событий для перетаскивания
   const onMouseDown = (e) => {
     isDragging = true;
     previousX = e.clientX;
@@ -99,17 +96,16 @@ document.addEventListener("DOMContentLoaded", function () {
       const diff = e.clientX - previousX;
       const slideOffset = diff / slideWidth;
       if (Math.abs(slideOffset) >= 1) {
-        nav(Math.sign(slideOffset)); // Вращаем карусель
+        nav(Math.sign(slideOffset));
         previousX = e.clientX;
       }
     }
   };
 
   const onMouseUpOrLeave = () => {
-    isDragging = false; // Останавливаем вращение
+    isDragging = false;
   };
 
-  // Слушатели событий
   const slider = document.querySelector(".slider3d");
   slider.addEventListener("mousedown", onMouseDown);
   slider.addEventListener("mousemove", onMouseMove);
@@ -139,7 +135,6 @@ function createSlider3d() {
   const step = 360 / all;
   let angle = 0;
 
-  // Устанавливаем начальные трансформации для всех элементов
   for (let i = 0; i < all; i++) {
     const rad = (i * step * Math.PI) / 180;
     wrap.children[i].style.transform = `translate3d(${
@@ -147,13 +142,11 @@ function createSlider3d() {
     }px, 0, ${myR * Math.cos(rad)}px) rotateY(${i * step}deg)`;
   }
 
-  // Функция навигации
   function nav(d) {
     angle += step * d;
     wrap.style.transform = `translateZ(${-myR}px) rotateY(${angle}deg)`;
   }
 
-  // Слушатели событий
   slider.addEventListener("mousedown", onMouseDown);
   slider.addEventListener("mousemove", onMouseMove);
   slider.addEventListener("mouseup", onMouseUpOrLeave);
