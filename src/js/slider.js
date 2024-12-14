@@ -18,6 +18,13 @@ document.addEventListener("DOMContentLoaded", function () {
   let rotationDirection = 1;
   let previousAngle = rotationAngle;
 
+  const maxSpeed = 4.3;
+  const speedFactor = 1;
+
+  // Для вычисления скорости
+  let previousTime = Date.now();
+  let currentSpeed = 0;
+
   function nav(d) {
     rotationAngle += (360 / carouselItems.length) * d;
     document.querySelector(
@@ -28,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const onMouseDown = (e) => {
     isDragging = true;
     previousX = e.clientX;
+    previousTime = Date.now();
     e.preventDefault();
   };
 
@@ -35,14 +43,21 @@ document.addEventListener("DOMContentLoaded", function () {
     if (isDragging) {
       const diff = e.clientX - previousX;
       const slideOffset = diff / slideWidth;
-
       rotationDirection = slideOffset > 0 ? 1 : -1;
 
-      rotationAngle += slideOffset * (360 / carouselItems.length) * 3;
+      let speed = slideOffset * (360 / carouselItems.length) * speedFactor;
+      speed = Math.min(Math.max(speed, -maxSpeed), maxSpeed);
+      rotationAngle += speed;
+
       document.querySelector(
         ".slider3d_wrap"
       ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+      const currentTime = Date.now();
+      currentSpeed = Math.abs(
+        (e.clientX - previousX) / (currentTime - previousTime)
+      );
 
+      previousTime = currentTime;
       previousX = e.clientX;
     }
   };
@@ -105,11 +120,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
   handleClick(0);
 
+  function updateSlideStyles() {
+    const wrap = document.querySelector(".slider3d_wrap");
+    const all = wrap.children.length;
+    const step = 360 / all;
+
+    const centerAngle = rotationAngle % 360;
+
+    for (let i = 0; i < all; i++) {
+      const angle = (i * step + centerAngle) % 360;
+      const angleDiff =
+        Math.abs(angle) > 180 ? 360 - Math.abs(angle) : Math.abs(angle);
+
+      const slide = wrap.children[i];
+
+      const opacity = Math.max(1 - angleDiff / 180, 0.4);
+      slide.style.opacity = opacity;
+    }
+  }
+
   function rotateSlider() {
     rotationAngle += rotationSpeed * rotationDirection;
+
     document.querySelector(
       ".slider3d_wrap"
     ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+
+    updateSlideStyles();
 
     requestAnimationFrame(rotateSlider);
   }
