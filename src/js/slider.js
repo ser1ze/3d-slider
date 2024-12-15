@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const maxSpeed = 4.3;
   const speedFactor = 1;
 
-  // Для вычисления скорости
   let previousTime = Date.now();
   let currentSpeed = 0;
 
@@ -64,6 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const onMouseUpOrLeave = () => {
     isDragging = false;
+
+    updateSlideStyles();
+
+    const wrap = document.querySelector(".slider3d_wrap");
+    wrap.style.transition = "transform 0.4s ease-out";
   };
 
   function handleClick(index) {
@@ -93,6 +97,8 @@ document.addEventListener("DOMContentLoaded", function () {
     buttons[index].classList.add("active");
 
     highlightImage(index);
+
+    updateSlideStyles();
   }
 
   function highlightImage(index) {

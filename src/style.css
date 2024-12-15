@@ -415,7 +415,7 @@ section {
   position: relative;
   max-width: 705px;
   width: 100%;
-  z-index: 2000;
+
   perspective: 800px;
 }
 
@@ -425,7 +425,7 @@ section {
   height: 100%;
   transform-style: preserve-3d;
   will-change: transform;
-  transition: transform 0.75s;
+  transition: transform 0.35s;
 }
 
 .frame {
@@ -568,7 +568,7 @@ section {
   user-select: none;
   width: 350px;
   perspective-origin: 50% -10%;
-  transition: perspective-origin 0.5s, perspective 0.5s;
+
   cursor: pointer;
 }
 
