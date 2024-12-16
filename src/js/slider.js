@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const speedFactor = 1;
 
   let previousTime = Date.now();
-  let currentSpeed = 0;
 
   function nav(d) {
     rotationAngle += (360 / carouselItems.length) * d;
@@ -61,15 +60,14 @@ document.addEventListener("DOMContentLoaded", function () {
       previousTime = currentTime;
       previousX = e.clientX;
 
-      updateSlideStyles();
+    
     }
   };
 
   const onMouseUpOrLeave = () => {
     isDragging = false;
 
-    updateSlideStyles();
-
+ 
     const wrap = document.querySelector(".slider3d_wrap");
     wrap.style.transition = "transform 0.4s ease-out";
   };
@@ -102,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     highlightImage(index);
 
-    updateSlideStyles();
+   
   }
 
   function highlightImage(index) {
@@ -156,11 +154,10 @@ document.addEventListener("DOMContentLoaded", function () {
       ".slider3d_wrap"
     ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
 
-    updateSlideStyles();
+  
 
     requestAnimationFrame(rotateSlider);
   }
-
   rotateSlider();
 
   const slider = document.querySelector(".slider3d");
