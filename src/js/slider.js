@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let previousAngle = rotationAngle;
 
   const maxSpeed = 4.3;
+  const increasedMaxSpeed = maxSpeed * 1.5;
   const speedFactor = 1;
 
   let previousTime = Date.now();
@@ -45,12 +46,13 @@ document.addEventListener("DOMContentLoaded", function () {
       rotationDirection = slideOffset > 0 ? 1 : -1;
 
       let speed = slideOffset * (360 / carouselItems.length) * speedFactor;
-      speed = Math.min(Math.max(speed, -maxSpeed), maxSpeed);
+      speed = Math.min(Math.max(speed, -increasedMaxSpeed), increasedMaxSpeed);
       rotationAngle += speed;
 
       document.querySelector(
         ".slider3d_wrap"
       ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+
       const currentTime = Date.now();
       currentSpeed = Math.abs(
         (e.clientX - previousX) / (currentTime - previousTime)
@@ -58,6 +60,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       previousTime = currentTime;
       previousX = e.clientX;
+
+      updateSlideStyles();
     }
   };
 
@@ -161,9 +165,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const slider = document.querySelector(".slider3d");
   slider.addEventListener("mousedown", onMouseDown);
-  slider.addEventListener("mousemove", onMouseMove);
-  slider.addEventListener("mouseup", onMouseUpOrLeave);
-  slider.addEventListener("mouseleave", onMouseUpOrLeave);
+
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseup", onMouseUpOrLeave);
+  document.addEventListener("mouseleave", onMouseUpOrLeave);
 
   function createSlider3d() {
     const wrap = document.querySelector(".slider3d_wrap");
