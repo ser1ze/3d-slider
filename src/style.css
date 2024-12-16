@@ -1,8 +1,8 @@
 @charset "UTF-8";
 @font-face {
   font-family: "Arial";
-  src: url("./fonts/Arial/Arial.woff") format("woff"),
-    url("./fonts/Arial/Arial.ttf") format("ttf");
+  src: url("./src/fonts/Arial/Arial.woff") format("woff"),
+    url("./src/fonts/Arial/Arial.ttf") format("ttf");
 }
 
 /* Mixins */
@@ -468,7 +468,7 @@ section {
 }
 
 /*.slider3d_wrap :nth-child(1) {
-	background-image: url(../../../public/img/translaters.png);
+	background-image: url(../src/../src/../src/public/img/translaters.png);
 }
 */
 
@@ -694,49 +694,49 @@ section {
 
 
 #img1 .cuboid__side:nth-of-type(5) {
-  background-image: url('./public/img/translaters.png');
+  background-image: url('./src/img/translaters.png');
   background-size: cover;
   background-position: center;
 }
 
 #img2 .cuboid__side:nth-of-type(5) {
-  background-image: url('./public/img/journalists.png');
+  background-image: url('./src/img/journalists.png');
   background-size: cover;
   background-position: center;
 }
 
 #img3 .cuboid__side:nth-of-type(5) {
-  background-image: url('./public/img/call.png');
+  background-image: url('./src/img/call.png');
   background-size: cover;
   background-position: center;
 }
 
 #img4 .cuboid__side:nth-of-type(5) {
-  background-image: url('./public/img/students.png');
+  background-image: url('./src/img/students.png');
   background-size: cover;
   background-position: center;
 }
 
 #img5 .cuboid__side:nth-of-type(5) {
-  background-image: url('./public/img/busines.png');
+  background-image: url('./src/img/busines.png');
   background-size: cover;
   background-position: center;
 }
 
 #img6 .cuboid__side:nth-of-type(5) {
-  background-image: url('./public/img/medicine.png');
+  background-image: url('./src/img/medicine.png');
   background-size: cover;
   background-position: center;
 }
 
 #img7 .cuboid__side:nth-of-type(5) {
-  background-image: url('./public/img/jurisprudence.png');
+  background-image: url('./src/img/jurisprudence.png');
   background-size: cover;
   background-position: center;
 }
 
 #img8 .cuboid__side:nth-of-type(5) {
-  background-image: url('./public/img/government.png');
+  background-image: url('./src/img/government.png');
   background-size: cover;
   background-position: center;
 }
