@@ -1,8 +1,8 @@
 @charset "UTF-8";
 @font-face {
   font-family: "Arial";
-  src: url("./src/fonts/Arial/Arial.woff") format("woff"),
-    url("./src/fonts/Arial/Arial.ttf") format("ttf");
+  src: url("fonts/Arial/Arial.woff") format("woff"),
+    url("fonts/Arial/Arial.ttf") format("ttf");
 }
 
 /* Mixins */
