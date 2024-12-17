@@ -36,6 +36,10 @@ document.addEventListener("DOMContentLoaded", function () {
     previousX = e.clientX;
     previousTime = Date.now();
     e.preventDefault();
+
+    const wrap = document.querySelector(".slider3d");
+    wrap.style.transition = "transform 0.2s ease, scale 0.2s ease";
+    wrap.style.transform = "scale(0.95)";
   };
 
   const onMouseMove = (e) => {
@@ -59,17 +63,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
       previousTime = currentTime;
       previousX = e.clientX;
-
-    
+      updateSlideStyles();
     }
   };
 
   const onMouseUpOrLeave = () => {
     isDragging = false;
-
- 
-    const wrap = document.querySelector(".slider3d_wrap");
-    wrap.style.transition = "transform 0.4s ease-out";
+    updateSlideStyles();
+    const wrap = document.querySelector(".slider3d");
+    wrap.style.transition = "transform 0.3s ease-out, scale 0.3s ease";
+    wrap.style.transform = "scale(1)";
   };
 
   function handleClick(index) {
@@ -97,10 +100,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     buttons.forEach((btn) => btn.classList.remove("active"));
     buttons[index].classList.add("active");
-
+    updateSlideStyles();
     highlightImage(index);
-
-   
   }
 
   function highlightImage(index) {
@@ -141,9 +142,13 @@ document.addEventListener("DOMContentLoaded", function () {
         Math.abs(angle) > 180 ? 360 - Math.abs(angle) : Math.abs(angle);
 
       const slide = wrap.children[i];
+      const cuboidSide = slide.querySelector(".cuboid__side:nth-of-type(5)");
 
-      const opacity = Math.max(1 - angleDiff / 180, 0.4);
-      slide.style.opacity = opacity;
+      const imageOpacity = Math.max(1 - angleDiff / 180, 0.4);
+
+      if (cuboidSide) {
+        cuboidSide.style.opacity = imageOpacity;
+      }
     }
   }
 
@@ -153,11 +158,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(
       ".slider3d_wrap"
     ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
-
-  
-
+    updateSlideStyles();
     requestAnimationFrame(rotateSlider);
   }
+
   rotateSlider();
 
   const slider = document.querySelector(".slider3d");
