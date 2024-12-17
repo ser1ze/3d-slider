@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const slide = wrap.children[i];
       const cuboidSide = slide.querySelector(".cuboid__side:nth-of-type(5)");
 
-      const imageOpacity = Math.max(1 - angleDiff / 180, 0.4);
+      const imageOpacity = Math.max(0.9 - angleDiff / 180, 0.4);
 
       if (cuboidSide) {
         cuboidSide.style.opacity = imageOpacity;

@@ -594,9 +594,9 @@ section {
 
 :root {
   --shade-one: rgba(180, 180, 180, 0.1);
-  --shade-two: rgba(180, 180, 180, 0.1);
+  --shade-two: rgba(180, 180, 180, 0.2);
   --shade-three: rgba(180, 180, 180, 0.1);
-  --thickness: 2;
+  --thickness: 0.4;
 }
 
 .cuboid {
