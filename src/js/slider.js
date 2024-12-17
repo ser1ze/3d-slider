@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let rotationDirection = 1;
   let previousAngle = rotationAngle;
 
-  const maxSpeed = 4.3;
+  const maxSpeed = 4.3 * 1.5;
   const increasedMaxSpeed = maxSpeed * 1.5;
   const speedFactor = 1;
 
