@@ -418,7 +418,7 @@ section {
   height: 100%;
   transform-style: preserve-3d;
   will-change: transform;
-  transition: transform 0.35s;
+  transition: transform 0.18s;
 }
 
 .slider3d_wrap > * {
@@ -590,7 +590,6 @@ section {
 *:before,
 *:after {
   transform-style: preserve-3d;
-  transition: background 0.25s, transform 0.25s;
 }
 
 :root {
