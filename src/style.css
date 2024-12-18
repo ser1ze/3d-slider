@@ -609,7 +609,7 @@ section {
 
 .cuboid__side {
   position: absolute;
-  background-color: var(--shade-one);
+  background-color: #473f3f;
   border-width: 0.5vmin;
   border-radius: 6px;
 }
