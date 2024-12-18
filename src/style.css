@@ -716,3 +716,59 @@ section {
   background-size: cover;
   background-position: center;
 }
+
+#img1 .cuboid__side:nth-of-type(6) {
+  background-image: url("img/translaters.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+}
+
+#img2 .cuboid__side:nth-of-type(6) {
+  background-image: url("img/journalists.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+}
+
+#img3 .cuboid__side:nth-of-type(6) {
+  background-image: url("img/call.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+}
+
+#img4 .cuboid__side:nth-of-type(6) {
+  background-image: url("img/students.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+}
+
+#img5 .cuboid__side:nth-of-type(6) {
+  background-image: url("img/busines.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+}
+
+#img6 .cuboid__side:nth-of-type(6) {
+  background-image: url("img/medicine.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+}
+
+#img7 .cuboid__side:nth-of-type(6) {
+  background-image: url("img/jurisprudence.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+}
+
+#img8 .cuboid__side:nth-of-type(6) {
+  background-image: url("img/government.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+}
