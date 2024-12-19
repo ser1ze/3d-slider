@@ -7,7 +7,7 @@
 
 @font-face {
   font-family: ST-SimpleSquare;
-  src: url("/src/fonts/ST-SimpleSquare/ST-SimpleSquare.woff") format("woff");
+  src: url("/fonts/ST-SimpleSquare/ST-SimpleSquare.woff") format("woff");
 }
 
 /* Mixins */
