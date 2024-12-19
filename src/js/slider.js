@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let buttons = [];
   let textElements = [];
   let carouselItems = [...document.querySelectorAll(".slider3d_wrap > div")];
-  let imageElements = document.querySelectorAll("div[id^='img']");
 
   for (let i = 1; i <= 8; i++) {
     buttons.push(document.getElementById("btn" + i));
@@ -10,19 +9,26 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   let rotationAngle = 0;
-  const rotationSpeed = 0.05;
+  const rotationSpeed = 0.06;
   let isDragging = false;
   let previousX;
   let slideWidth;
-
-  let rotationDirection = 1;
-  let previousAngle = rotationAngle;
-
-  const maxSpeed = 4.3 * 1.5;
+  let rotationDirection = 1; 
+  let previousDirection = 1; 
+  const maxSpeed = 4.3 * 1.5 * 1.2;
   const increasedMaxSpeed = maxSpeed * 1.5;
-  const speedFactor = 1;
+  const speedFactor = 1.2;
 
-  let previousTime = Date.now();
+  function normalizeAngle(angle) {
+    return ((angle % 360) + 360) % 360;
+  }
+
+  function getShortestAngleDiff(fromAngle, toAngle) {
+    const normalizedFrom = normalizeAngle(fromAngle);
+    const normalizedTo = normalizeAngle(toAngle);
+    const diff = (normalizedTo - normalizedFrom + 540) % 360 - 180;
+    return diff;
+  }
 
   function nav(d) {
     rotationAngle += (360 / carouselItems.length) * d;
@@ -34,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const onMouseDown = (e) => {
     isDragging = true;
     previousX = e.clientX;
-    previousTime = Date.now();
     e.preventDefault();
 
     const wrap = document.querySelector(".slider3d");
@@ -45,31 +50,36 @@ document.addEventListener("DOMContentLoaded", function () {
   const onMouseMove = (e) => {
     if (isDragging) {
       const diff = e.clientX - previousX;
-      const slideOffset = diff / slideWidth;
-      rotationDirection = slideOffset > 0 ? 1 : -1;
+      const threshold = 1; 
+  
+      if (Math.abs(diff) > threshold) {
+        const newDirection = diff > 0 ? 1 : -1;
 
-      let speed = slideOffset * (360 / carouselItems.length) * speedFactor;
-      speed = Math.min(Math.max(speed, -increasedMaxSpeed), increasedMaxSpeed);
-      rotationAngle += speed;
+        if (newDirection !== rotationDirection) {
+          rotationDirection = newDirection;
+          console.log(`Direction changed: ${rotationDirection}`);
+        }
+  
+        const slideOffset = diff / slideWidth;
+        let speed = slideOffset * (360 / carouselItems.length) * speedFactor;
+        speed = Math.min(Math.max(speed, -increasedMaxSpeed), increasedMaxSpeed);
+  
+        rotationAngle += speed;
+  
+        document.querySelector(
+          ".slider3d_wrap"
+        ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+  
+        previousX = e.clientX;
 
-      document.querySelector(
-        ".slider3d_wrap"
-      ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
-
-      const currentTime = Date.now();
-      currentSpeed = Math.abs(
-        (e.clientX - previousX) / (currentTime - previousTime)
-      );
-
-      previousTime = currentTime;
-      previousX = e.clientX;
-      updateSlideStyles();
+        updateSlideStyles();
+      }
     }
   };
-
+  
   const onMouseUpOrLeave = () => {
     isDragging = false;
-    updateSlideStyles();
+
     const wrap = document.querySelector(".slider3d");
     wrap.style.transition = "transform 0.3s ease-out, scale 0.3s ease";
     wrap.style.transform = "scale(1)";
@@ -88,37 +98,22 @@ document.addEventListener("DOMContentLoaded", function () {
     textElements[index].style.display = "block";
     textElements[index].style.opacity = "1";
 
-    let angle = (360 / carouselItems.length) * index;
-    rotationAngle = angle;
+    const targetAngle = (360 / carouselItems.length) * index;
 
-    rotationDirection = rotationAngle > previousAngle ? 1 : -1;
-    previousAngle = rotationAngle;
+    const angleDiff = getShortestAngleDiff(rotationAngle, targetAngle);
 
-    document.querySelector(
-      ".slider3d_wrap"
-    ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+    if (Math.abs(angleDiff) > 0.1) {
+      rotationDirection = angleDiff > 0 ? 1 : -1;
+      rotationAngle += angleDiff;
 
-    buttons.forEach((btn) => btn.classList.remove("active"));
-    buttons[index].classList.add("active");
-    updateSlideStyles();
-    highlightImage(index);
-  }
+      document.querySelector(
+        ".slider3d_wrap"
+      ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
 
-  function highlightImage(index) {
-    const activeText = textElements[index].textContent.toLowerCase();
-
-    imageElements.forEach((imgElement) => {
-      imgElement.classList.remove("highlight");
-    });
-
-    imageElements.forEach((imgElement) => {
-      const imgId = imgElement.id;
-      const imgName = imgId.replace("img", "").toLowerCase();
-
-      if (activeText.includes(imgName)) {
-        imgElement.classList.add("highlight");
-      }
-    });
+      buttons.forEach((btn) => btn.classList.remove("active"));
+      buttons[index].classList.add("active");
+      updateSlideStyles();
+    }
   }
 
   buttons.forEach((button, index) => {
@@ -127,17 +122,15 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  handleClick(0);
-
   function updateSlideStyles() {
     const wrap = document.querySelector(".slider3d_wrap");
     const all = wrap.children.length;
     const step = 360 / all;
 
-    const centerAngle = rotationAngle % 360;
+    const centerAngle = normalizeAngle(rotationAngle);
 
     for (let i = 0; i < all; i++) {
-      const angle = (i * step + centerAngle) % 360;
+      const angle = normalizeAngle(i * step + centerAngle);
       const angleDiff =
         Math.abs(angle) > 180 ? 360 - Math.abs(angle) : Math.abs(angle);
 
@@ -182,9 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     for (let i = 0; i < all; i++) {
       const rad = (i * step * Math.PI) / 180;
-      wrap.children[i].style.transform = `translate3d(${
-        myR * Math.sin(rad)
-      }px, 0, ${myR * Math.cos(rad)}px) rotateY(${i * step}deg)`;
+      wrap.children[i].style.transform = `translate3d(${myR * Math.sin(rad)}px, 0, ${myR * Math.cos(rad)}px) rotateY(${i * step}deg)`;
     }
 
     nav(0);
