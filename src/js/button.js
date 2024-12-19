@@ -38,9 +38,18 @@ function makeButtonClickable(button) {
 }
 const buyBtn = document.querySelector(".card");
 
+const sliderBtns = document.querySelectorAll(".slider-btn")
+
 if (buyBtn) {
   makeButtonClickable(buyBtn);
 }
+if (sliderBtns) {
+  sliderBtns.forEach((btn) => makeButtonClickable(btn))
+}
+
+
+
+
 document.querySelectorAll(".card-wrap").forEach((card) => {
   const cardElement = card.querySelector(".card");
 
@@ -60,8 +69,10 @@ document.querySelectorAll(".card-wrap").forEach((card) => {
     cardElement.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px)";
   });
 });
+
 window.onload = function () {
   const buyButtons = document.getElementsByClassName("card");
+  const sliderBtns = document.getElementsByClassName("slider-btn")
 
   const addMouseEffect = (buttons) => {
     for (const button of buttons) {
@@ -77,4 +88,5 @@ window.onload = function () {
   };
 
   addMouseEffect(buyButtons);
+  addMouseEffect(sliderBtns)
 };
