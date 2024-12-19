@@ -258,6 +258,7 @@ justify-content: center;
 }
 .blocks-wrapper .block:nth-child(1) {
   opacity: 1;
+  height: fit-content;
 }
 .card-content {
   font-family: ST-SimpleSquare;
