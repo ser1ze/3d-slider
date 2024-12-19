@@ -418,7 +418,7 @@ section {
   height: 100%;
   transform-style: preserve-3d;
   will-change: transform;
-  transition: transform 0.15s;
+  transition: transform 0.13s;
 }
 
 .slider3d_wrap > * {
