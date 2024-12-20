@@ -150,7 +150,7 @@ ul {
 }
 
 img {
-  object-fit: cover;
+  object-fit: contain;
 }
 
 section {
@@ -428,7 +428,7 @@ section {
 .slider3d_wrap img {
   width: 310px;
   height: 214px;
-  object-fit: cover;
+  object-fit: contain;
 
   user-select: none;
   border-radius: 6px;
@@ -634,7 +634,7 @@ section {
   left: 0;
   transform: translate3d(0, 0, calc(var(--thickness) * 0.5vmin));
   background-image: url(/public/img/government.png);
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
@@ -650,104 +650,104 @@ section {
 
 #img1 .cuboid__side:nth-of-type(5) {
   background-image: url("img/busines.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
 #img2 .cuboid__side:nth-of-type(5) {
   background-image: url("img/government.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
 #img3 .cuboid__side:nth-of-type(5) {
   background-image: url("img/medicine.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
 #img4 .cuboid__side:nth-of-type(5) {
   background-image: url("img/translaters.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
 #img5 .cuboid__side:nth-of-type(5) {
   background-image: url("img/jurisprudence.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
 #img6 .cuboid__side:nth-of-type(5) {
   background-image: url("img/journalists.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
 #img7 .cuboid__side:nth-of-type(5) {
   background-image: url("img/call.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
 #img8 .cuboid__side:nth-of-type(5) {
   background-image: url("img/students.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
 #img1 .cuboid__side:nth-of-type(6) {
   background-image: url("img/busines.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   opacity: 0.2;
 }
 
 #img2 .cuboid__side:nth-of-type(6) {
   background-image: url("img/government.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   opacity: 0.2;
 }
 
 #img3 .cuboid__side:nth-of-type(6) {
   background-image: url("img/medicine.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   opacity: 0.2;
 }
 
 #img4 .cuboid__side:nth-of-type(6) {
   background-image: url("img/translaters.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   opacity: 0.2;
 }
 
 #img5 .cuboid__side:nth-of-type(6) {
   background-image: url("img/jurisprudence.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   opacity: 0.2;
 }
 
 #img6 .cuboid__side:nth-of-type(6) {
   background-image: url("img/journalists.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   opacity: 0.2;
 }
 
 #img7 .cuboid__side:nth-of-type(6) {
   background-image: url("img/call.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   opacity: 0.2;
 }
 
 #img8 .cuboid__side:nth-of-type(6) {
   background-image: url("img/students.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   opacity: 0.2;
 }
