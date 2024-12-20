@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let isDragging = false;
   let previousX;
   let slideWidth;
-  let rotationDirection = 1; 
-  let previousDirection = 1; 
+  let rotationDirection = 1;
+  let previousDirection = 1;
   const maxSpeed = 4.3 * 1.5 * 1.2;
   const increasedMaxSpeed = maxSpeed * 1.5;
   const speedFactor = 1.2;
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function getShortestAngleDiff(fromAngle, toAngle) {
     const normalizedFrom = normalizeAngle(fromAngle);
     const normalizedTo = normalizeAngle(toAngle);
-    const diff = (normalizedTo - normalizedFrom + 540) % 360 - 180;
+    const diff = ((normalizedTo - normalizedFrom + 540) % 360) - 180;
     return diff;
   }
 
@@ -50,8 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const onMouseMove = (e) => {
     if (isDragging) {
       const diff = e.clientX - previousX;
-      const threshold = 1; 
-  
+      const threshold = 1;
+
       if (Math.abs(diff) > threshold) {
         const newDirection = diff > 0 ? 1 : -1;
 
@@ -59,24 +59,27 @@ document.addEventListener("DOMContentLoaded", function () {
           rotationDirection = newDirection;
           console.log(`Direction changed: ${rotationDirection}`);
         }
-  
+
         const slideOffset = diff / slideWidth;
         let speed = slideOffset * (360 / carouselItems.length) * speedFactor;
-        speed = Math.min(Math.max(speed, -increasedMaxSpeed), increasedMaxSpeed);
-  
+        speed = Math.min(
+          Math.max(speed, -increasedMaxSpeed),
+          increasedMaxSpeed
+        );
+
         rotationAngle += speed;
-  
+
         document.querySelector(
           ".slider3d_wrap"
         ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
-  
+
         previousX = e.clientX;
 
         updateSlideStyles();
       }
     }
   };
-  
+
   const onMouseUpOrLeave = () => {
     isDragging = false;
 
@@ -170,12 +173,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const gCS = window.getComputedStyle(document.querySelector(".slider3d"));
     const width = parseInt(gCS.width);
     slideWidth = width / all;
-    const myR = (width / (2 * Math.tan(Math.PI / all))) * 0.95;
+    const myR = (width / (2 * Math.tan(Math.PI / all))) * 0.5;
     const step = 360 / all;
 
     for (let i = 0; i < all; i++) {
       const rad = (i * step * Math.PI) / 180;
-      wrap.children[i].style.transform = `translate3d(${myR * Math.sin(rad)}px, 0, ${myR * Math.cos(rad)}px) rotateY(${i * step}deg)`;
+      wrap.children[i].style.transform = `translate3d(${
+        myR * Math.sin(rad)
+      }px, 0, ${myR * Math.cos(rad)}px) rotateY(${i * step}deg)`;
     }
 
     nav(0);
