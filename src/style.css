@@ -250,7 +250,7 @@ section {
   will-change: transform;
 }
 .blocks-wrapper .block:nth-child(1) {
-  opacity: 1;
+  opacity: 0;
   height: fit-content;
 }
 .card-content {
@@ -444,29 +444,10 @@ section {
   flex-direction: column;
 }
 
-.direction-box {
-  position: relative;
-
-  cursor: pointer;
-}
-.direction-box:hover .mouse-wrapper {
-  opacity: 1;
-  animation: fadeIn 0.5s ease-in;
-}
-
-.direction-title {
-  display: inline-flex;
+.direction-boxes {
+  display: flex;
   justify-content: center;
-  font-family: "Arial", sans-serif;
-  font-size: 40px;
-  line-height: 43.2px;
-  color: #cccccc;
 }
-
-.direction-slider {
-  margin: 264px auto 100px;
-}
-
 .direction-desc {
   width: 100%;
   margin: 0 auto;
@@ -484,34 +465,25 @@ section {
   transition: all 0.3s ease;
 }
 
-.direction-boxes {
-  position: relative;
-  border-radius: 4px;
-
-  z-index: -1;
-
-  display: flex;
-  align-items: center;
-
-  flex-direction: column;
-}
-
 .blocks-wrapper {
+  margin: 0 auto;
   position: relative;
+  width: 920px;
   padding: 2px 18px 0px 18px;
+  height: 156px;
   text-align: left;
   overflow: hidden;
 }
 
 .block {
-  width: 924px !important;
-  height: 156px !important;
+  position: absolute;
+  width: 924px;
+  height: 156px;
   display: flex;
-  display: none;
   justify-content: center;
   align-items: center;
-  font-weight: 400;
   font-size: 20px;
+  font-weight: 400;
   line-height: 130%;
   text-align: left;
   color: #ccc;
@@ -524,26 +496,26 @@ section {
     opacity: 1;
   }
   to {
-    transform: translateX(-100%);
-    opacity: 0; /* Уменьшаем прозрачность при сдвиге */
+    transform: translateY(100%);
+    opacity: 0;
   }
 }
 @keyframes slideIn {
   from {
-    transform: translateX(-100%); /* Начинаем слева */
-    opacity: 0; /* Начальная прозрачность */
+    transform: translateY(100%);
+    opacity: 0;
   }
   to {
     transform: translateX(0);
-    opacity: 1; /* Конечная прозрачность */
+    opacity: 1;
   }
 }
 .slide-in {
-  animation: slideIn 1s ease-in-out forwards;
+  animation: slideIn 0.8s ease-in-out forwards;
 }
 
 .slide-left {
-  animation: slideLeft 2.5s ease-in-out forwards;
+  animation: slideLeft 0.8s ease-in-out forwards;
 }
 
 *,

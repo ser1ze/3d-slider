@@ -89,17 +89,19 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   function handleClick(index) {
-    textElements.forEach((textElement) => {
-      textElement.classList.remove("slide-in");
-      textElement.classList.add("slide-left");
-      textElement.style.opacity = "0.5";
-      textElement.style.display = "none";
+    textElements.forEach((textElement, i) => {
+      if (i !== index) {
+        if (textElement.classList.contains("slide-in")) {
+          textElement.classList.remove("slide-in");
+          textElement.classList.add("slide-left");
+          textElement.style.opacity = "0.5";
+        }
+      }
     });
-
-    textElements[index].classList.remove("slide-left");
-    textElements[index].classList.add("slide-in");
-    textElements[index].style.display = "block";
-    textElements[index].style.opacity = "1";
+    let currentTextElement = textElements[index];
+    currentTextElement.classList.remove("slide-left");
+    currentTextElement.classList.add("slide-in");
+    currentTextElement.style.display = "block";
 
     const targetAngle = (360 / carouselItems.length) * index;
 
