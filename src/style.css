@@ -613,6 +613,7 @@ section {
   height: calc(var(--thickness) * 1vmin);
   width: 100%;
   bottom: 0;
+  opacity: 0;
   transform: translate(0%, 50%) rotateX(90deg);
   background-image: var(--shade-two);
 }
