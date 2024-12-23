@@ -1,14 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
   let buttons = [];
   let textElements = [];
-  let carouselItems = [...document.querySelectorAll(".slider3d_wrap > div")];
+  let cuboids = [...document.querySelectorAll(".slider3d_wrap .cuboid")];
 
   for (let i = 1; i <= 8; i++) {
     buttons.push(document.getElementById("btn" + i));
     textElements.push(document.getElementById("text" + i));
   }
 
-  let rotationAngle = 65;
+  let rotationAngle = 0;
   const rotationSpeed = 0.06;
   let isDragging = false;
   let previousX;
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function nav(d) {
-    rotationAngle += (360 / carouselItems.length) * d;
+    rotationAngle += (360 / cuboids.length) * d;
     document.querySelector(
       ".slider3d_wrap"
     ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const slideOffset = diff / slideWidth;
-        let speed = slideOffset * (360 / carouselItems.length) * speedFactor;
+        let speed = slideOffset * (360 / cuboids.length) * speedFactor;
         speed = Math.min(
           Math.max(speed, -increasedMaxSpeed),
           increasedMaxSpeed
@@ -101,9 +101,9 @@ document.addEventListener("DOMContentLoaded", function () {
     currentTextElement.classList.add("slide-in");
     currentTextElement.style.display = "block";
 
-    const targetAngle = (360 / carouselItems.length) * index;
+    const targetAngle = (360 / cuboids.length) * index;
 
-    const angleDiff = getShortestAngleDiff(rotationAngle, targetAngle + 65);
+    const angleDiff = getShortestAngleDiff(rotationAngle, targetAngle);
 
     if (Math.abs(angleDiff) > 0.1) {
       rotationDirection = angleDiff > 0 ? 1 : -1;
@@ -125,9 +125,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  rotateSlider();
+
   function updateSlideStyles() {
-    const wrap = document.querySelector(".slider3d_wrap");
-    const all = wrap.children.length;
+    const all = cuboids.length;
     const step = 360 / all;
 
     const centerAngle = normalizeAngle(rotationAngle);
@@ -137,8 +138,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const angleDiff =
         Math.abs(angle) > 180 ? 360 - Math.abs(angle) : Math.abs(angle);
 
-      const slide = wrap.children[i];
-      const cuboidSide = slide.querySelector(".cuboid__side:nth-of-type(5)");
+      const cuboid = cuboids[i];
+      const cuboidSide = cuboid.querySelector(".cuboid__side:nth-of-type(5)");
 
       const imageOpacity = Math.max(0.9 - angleDiff / 180, 0.4);
 
@@ -157,7 +158,6 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSlideStyles();
     requestAnimationFrame(rotateSlider);
   }
-  rotateSlider();
 
   const slider = document.querySelector(".slider3d");
   slider.addEventListener("mousedown", onMouseDown);
@@ -167,19 +167,28 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("mouseleave", onMouseUpOrLeave);
 
   function createSlider3d() {
-    const wrap = document.querySelector(".slider3d_wrap");
-    const all = wrap.children.length;
+    const all = cuboids.length;
+
     const gCS = window.getComputedStyle(document.querySelector(".slider3d"));
     const width = parseInt(gCS.width);
     slideWidth = width / all;
-    const myR = (width / (2 * Math.tan(Math.PI / all))) * 0.5;
+    const myR = (width / (2 * Math.tan(Math.PI / all))) * 1.05;
     const step = 360 / all;
 
     for (let i = 0; i < all; i++) {
       const rad = (i * step * Math.PI) / 180;
-      wrap.children[i].style.transform = `translate3d(${
-        myR * Math.sin(rad)
-      }px, 0, ${myR * Math.cos(rad)}px) rotateY(${i * step}deg)`;
+
+      const cuboid = cuboids[i];
+      if (cuboid) {
+        cuboid.style.transform = `translate3d(${myR * Math.sin(rad)}px, 0, ${
+          myR * Math.cos(rad)
+        }px) rotateY(${i * step}deg)`;
+
+        cuboid.addEventListener("click", function () {
+          handleClick(i);
+          console.log("Cuboid clicked:", cuboid, "Index:", i);
+        });
+      }
     }
 
     nav(0);
