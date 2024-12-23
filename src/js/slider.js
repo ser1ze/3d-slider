@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function nav(d) {
-    rotationAngle += (360 / carouselItems.length) * d + 65;
+    rotationAngle += (360 / carouselItems.length) * d;
     document.querySelector(
       ".slider3d_wrap"
     ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
@@ -56,7 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (newDirection !== rotationDirection) {
           rotationDirection = newDirection;
-          console.log(`Direction changed: ${rotationDirection}`);
         }
 
         const slideOffset = diff / slideWidth;
