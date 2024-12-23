@@ -8,13 +8,12 @@ document.addEventListener("DOMContentLoaded", function () {
     textElements.push(document.getElementById("text" + i));
   }
 
-  let rotationAngle = 0;
+  let rotationAngle = 65;
   const rotationSpeed = 0.06;
   let isDragging = false;
   let previousX;
   let slideWidth;
   let rotationDirection = 1;
-  let previousDirection = 1;
   const maxSpeed = 4.3 * 1.5 * 1.2;
   const increasedMaxSpeed = maxSpeed * 1.5;
   const speedFactor = 1.2;
@@ -105,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const targetAngle = (360 / carouselItems.length) * index;
 
-    const angleDiff = getShortestAngleDiff(rotationAngle, targetAngle);
+    const angleDiff = getShortestAngleDiff(rotationAngle, targetAngle + 65);
 
     if (Math.abs(angleDiff) > 0.1) {
       rotationDirection = angleDiff > 0 ? 1 : -1;
@@ -159,7 +158,6 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSlideStyles();
     requestAnimationFrame(rotateSlider);
   }
-
   rotateSlider();
 
   const slider = document.querySelector(".slider3d");
