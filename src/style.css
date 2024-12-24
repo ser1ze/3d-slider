@@ -833,3 +833,17 @@ section {
     inset -2px -2px 2px 0 rgba(0, 0, 0, 0.2);
   background: #20272b;
 }
+.pressed {
+  box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.2),
+    inset -2px -2px 2px 0 rgba(0, 0, 0, 0.2);
+  background: #20272b !important;
+}
+
+.pressed .btn-text.fast-click {
+  transform: scale(0.95);
+}
+
+.pressed .btn-text {
+  transform: scale(0.95);
+  color: #4a738c;
+}

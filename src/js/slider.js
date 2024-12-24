@@ -186,6 +186,24 @@ document.addEventListener("DOMContentLoaded", function () {
         }px) rotateY(${i * step}deg)`;
 
         cuboids.forEach((cuboid, i) => {
+          cuboid.addEventListener("mousedown", function () {
+            console.log(
+              `Cuboid mousedown: Index ${i}, Rotation Angle: ${rotationAngle}`
+            );
+
+            buttons.forEach((btn) => btn.classList.remove("pressed"));
+
+            if (i === 0) {
+              buttons[0].classList.add("pressed");
+            } else {
+              buttons[cuboids.length - i].classList.add("pressed");
+            }
+          });
+
+          document.addEventListener("mouseup", function () {
+            buttons.forEach((btn) => btn.classList.remove("pressed"));
+          });
+
           cuboid.addEventListener("click", function () {
             const totalSlides = cuboids.length;
 
