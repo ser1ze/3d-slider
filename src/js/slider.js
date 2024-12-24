@@ -168,7 +168,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function createSlider3d() {
     const all = cuboids.length;
-
+    const cuboidsArray = Array.from(cuboids);
+    console.log(cuboidsArray);
     const gCS = window.getComputedStyle(document.querySelector(".slider3d"));
     const width = parseInt(gCS.width);
     slideWidth = width / all;
@@ -184,9 +185,71 @@ document.addEventListener("DOMContentLoaded", function () {
           myR * Math.cos(rad)
         }px) rotateY(${i * step}deg)`;
 
-        cuboid.addEventListener("click", function () {
-          handleClick(i);
-          console.log("Cuboid clicked:", cuboid, "Index:", i);
+        cuboids.forEach((cuboid, i) => {
+          cuboid.addEventListener("click", function () {
+            const totalSlides = cuboids.length;
+
+            const currentIndex =
+              Math.round(rotationAngle / (360 / totalSlides)) % totalSlides;
+
+            const normalizedCurrentIndex =
+              (currentIndex + totalSlides) % totalSlides;
+
+            const targetAngle = (360 / totalSlides) * (totalSlides - i);
+
+            let angleDiff = targetAngle - rotationAngle;
+
+            if (angleDiff > 180) {
+              angleDiff -= 360;
+            } else if (angleDiff < -180) {
+              angleDiff += 360;
+            }
+
+            if (angleDiff > 0) {
+              rotationDirection = 1;
+            } else if (angleDiff < 0) {
+              rotationDirection = -1;
+            }
+
+            rotationAngle += angleDiff;
+
+            document.querySelector(
+              ".slider3d_wrap"
+            ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+
+            console.log(
+              `Cuboid clicked: Current Index: ${normalizedCurrentIndex}, Target Index: ${i}, Rotation Direction: ${rotationDirection}, Updated Rotation: ${rotationAngle}`
+            );
+
+            buttons.forEach((btn) => btn.classList.remove("active"));
+
+            if (i === 0) {
+              buttons[0].classList.add("active");
+            } else {
+              buttons[cuboids.length - i].classList.add("active");
+            }
+
+            textElements.forEach((textElement) => {
+              textElement.classList.remove("slide-in");
+              textElement.classList.add("slide-left");
+              textElement.style.opacity = "0.5";
+              textElement.style.display = "none";
+            });
+
+            if (i === 0) {
+              textElements[0].classList.remove("slide-left");
+              textElements[0].classList.add("slide-in");
+              textElements[0].style.opacity = "1";
+              textElements[0].style.display = "block";
+            } else {
+              textElements[cuboids.length - i].classList.remove("slide-left");
+              textElements[cuboids.length - i].classList.add("slide-in");
+              textElements[cuboids.length - i].style.opacity = "1";
+              textElements[cuboids.length - i].style.display = "block";
+            }
+
+            updateSlideStyles();
+          });
         });
       }
     }
