@@ -207,6 +207,9 @@ section {
   opacity: 0;
   transform: translateY(20px);
   will-change: transform;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
   animation: textUp 0.6s forwards;
 }
 
@@ -449,16 +452,6 @@ section {
   overflow: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-}
-
-.slider3d_wrap img {
-  width: 310px;
-  height: 214px;
-  object-fit: cover;
-
-  user-select: none;
-  border-radius: 6px;
-  opacity: 0.9;
 }
 
 .direction-row {

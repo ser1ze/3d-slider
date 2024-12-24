@@ -96,7 +96,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     });
-
     let currentTextElement = textElements[index];
     currentTextElement.classList.remove("slide-left");
     currentTextElement.classList.add("slide-in");
@@ -186,8 +185,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }px) rotateY(${i * step}deg)`;
 
         cuboid.addEventListener("click", function () {
-          console.log("Cuboid clicked:", cuboid, "Index:", i);
           handleClick(i);
+          console.log("Cuboid clicked:", cuboid, "Index:", i);
         });
       }
     }
