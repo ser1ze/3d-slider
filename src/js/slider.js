@@ -176,6 +176,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const myR = (width / (2 * Math.tan(Math.PI / all))) * 1.05;
     const step = 360 / all;
 
+    rotationAngle += 30;
+
     for (let i = 0; i < all; i++) {
       const rad = (i * step * Math.PI) / 180;
 
@@ -259,6 +261,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       }
     }
+
+    document.querySelector(
+      ".slider3d_wrap"
+    ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
 
     nav(0);
   }
