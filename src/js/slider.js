@@ -189,21 +189,9 @@ document.addEventListener("DOMContentLoaded", function () {
           cuboid.addEventListener("click", function () {
             const totalSlides = cuboids.length;
 
-            const currentIndex =
-              Math.round(rotationAngle / (360 / totalSlides)) % totalSlides;
-
-            const normalizedCurrentIndex =
-              (currentIndex + totalSlides) % totalSlides;
-
             const targetAngle = (360 / totalSlides) * (totalSlides - i);
 
-            let angleDiff = targetAngle - rotationAngle;
-
-            if (angleDiff > 180) {
-              angleDiff -= 360;
-            } else if (angleDiff < -180) {
-              angleDiff += 360;
-            }
+            const angleDiff = getShortestAngleDiff(rotationAngle, targetAngle);
 
             if (angleDiff > 0) {
               rotationDirection = 1;
@@ -218,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
 
             console.log(
-              `Cuboid clicked: Current Index: ${normalizedCurrentIndex}, Target Index: ${i}, Rotation Direction: ${rotationDirection}, Updated Rotation: ${rotationAngle}`
+              `Cuboid clicked: Target Index: ${i}, Target Angle: ${targetAngle}, Angle Diff: ${angleDiff}, Rotation Direction: ${rotationDirection}, Updated Rotation: ${rotationAngle}`
             );
 
             buttons.forEach((btn) => btn.classList.remove("active"));
