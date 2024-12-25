@@ -1,4 +1,5 @@
 function makeButtonClickable(button) {
+  console.log(button);
   let lastClickTime = 0;
   const delay = 120;
 
@@ -43,9 +44,7 @@ const sliderBtns = document.querySelectorAll(".slider-btn");
 if (buyBtn) {
   makeButtonClickable(buyBtn);
 }
-if (sliderBtns) {
-  sliderBtns.forEach((btn) => makeButtonClickable(btn));
-}
+sliderBtns.forEach((btn) => makeButtonClickable(btn));
 
 document.querySelectorAll(".card-wrap").forEach((card) => {
   const cardElement = card.querySelector(".card");
@@ -87,3 +86,5 @@ window.onload = function () {
   addMouseEffect(buyButtons);
   addMouseEffect(sliderBtns);
 };
+
+export { makeButtonClickable };

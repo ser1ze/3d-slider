@@ -1,3 +1,5 @@
+import { makeButtonClickable } from "./button.js";
+
 document.addEventListener("DOMContentLoaded", function () {
   let buttons = [];
   let textElements = [];
@@ -15,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let slideWidth;
   let rotationDirection = 1;
   const maxSpeed = 4.3 * 1.5 * 1.2;
-  const increasedMaxSpeed = maxSpeed * 1.5;
+  const increasedMaxSpeed = maxSpeed * 1.5 * 0.9;
   const speedFactor = 1.2;
 
   function normalizeAngle(angle) {
@@ -197,8 +199,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (i === 0) {
               buttons[0].classList.add("pressed");
+              makeButtonClickable(buttons[0]);
             } else {
               buttons[cuboids.length - i].classList.add("pressed");
+              makeButtonClickable(buttons[0]);
             }
           });
 
@@ -255,6 +259,8 @@ document.addEventListener("DOMContentLoaded", function () {
               textElements[cuboids.length - i].style.opacity = "1";
               textElements[cuboids.length - i].style.display = "block";
             }
+
+            cuboid.classList.add("fast-click");
 
             updateSlideStyles();
           });
