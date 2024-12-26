@@ -251,7 +251,6 @@ document.addEventListener("DOMContentLoaded", function () {
       ".slider3d_wrap"
     ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
     updateSlideStyles();
-    requestAnimationFrame(rotateSlider);
   }
   rotateSlider();
   const slider = document.querySelector(".slider3d");
