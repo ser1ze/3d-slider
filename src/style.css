@@ -588,6 +588,7 @@ section {
   transform: translate(50%, -50%) rotateY(90deg);
   background: var(--shade-two);
   border-radius: 6px;
+  margin: 2px;
 }
 
 .cuboid__side:nth-of-type(3) {
@@ -599,6 +600,7 @@ section {
   background: var(--shade-two);
   border-radius: 6px;
   overflow: hidden;
+  margin: 2px;
 }
 
 .cuboid__side:nth-of-type(4) {
@@ -609,6 +611,7 @@ section {
   transform: translate(-50%, -50%) rotateY(90deg);
   background: var(--shade-two);
   border-radius: 6px;
+  margin: 2px;
 }
 
 .cuboid__side:nth-of-type(5) {

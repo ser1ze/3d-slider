@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSlideStyles();
     requestAnimationFrame(rotateSlider);
   }
-
+  rotateSlider();
   const slider = document.querySelector(".slider3d");
   slider.addEventListener("mousedown", onMouseDown);
 
