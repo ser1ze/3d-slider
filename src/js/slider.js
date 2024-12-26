@@ -1,3 +1,6 @@
+// main.js
+import { makeButtonClickable } from "./button.js";
+
 document.addEventListener("DOMContentLoaded", function () {
   let buttons = [];
   let textElements = [];
@@ -17,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const maxSpeed = 4.3 * 1.5 * 1.2;
   const increasedMaxSpeed = maxSpeed * 1.5 * 0.9;
   const speedFactor = 1.2;
+  const delay = 120;
 
   function normalizeAngle(angle) {
     return ((angle % 360) + 360) % 360;
@@ -117,15 +121,106 @@ document.addEventListener("DOMContentLoaded", function () {
       buttons[index].classList.add("active");
       updateSlideStyles();
     }
+
+    applyFastClick(buttons[index]);
   }
+
+  function applyFastClick(button) {
+    if (!button) {
+      console.warn("Button not found for applying fast-click.");
+      return;
+    }
+    console.log("Applying fast-click to button:", button);
+    button.classList.add("fast-click");
+    setTimeout(() => {
+      button.classList.remove("fast-click");
+      console.log("Removed fast-click from button:", button);
+    }, delay);
+  }
+
+  function getButtonForIndex(index) {
+    if (index === 0) {
+      return buttons[0];
+    } else {
+      return buttons[cuboids.length - index];
+    }
+  }
+
+  buttons.forEach((button) => {
+    makeButtonClickable(button);
+  });
+
+  cuboids.forEach((cuboid, index) => {
+    cuboid.addEventListener("mousedown", function () {
+      console.log(
+        `Cuboid mousedown: Index ${index}, Rotation Angle: ${rotationAngle}`
+      );
+
+      buttons.forEach((btn) => btn.classList.remove("pressed"));
+
+      if (index === 0) {
+        buttons[0].classList.add("pressed");
+      } else {
+        buttons[cuboids.length - index].classList.add("pressed");
+      }
+    });
+
+    cuboid.addEventListener("click", function () {
+      const totalSlides = cuboids.length;
+
+      const targetAngle = (360 / totalSlides) * (totalSlides - index);
+
+      const angleDiff = getShortestAngleDiff(rotationAngle, targetAngle);
+
+      if (angleDiff > 0) {
+        rotationDirection = 1;
+      } else if (angleDiff < 0) {
+        rotationDirection = -1;
+      }
+
+      rotationAngle += angleDiff;
+
+      document.querySelector(
+        ".slider3d_wrap"
+      ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
+
+      buttons.forEach((btn) => btn.classList.remove("active"));
+
+      if (index === 0) {
+        buttons[0].classList.add("active");
+      } else {
+        buttons[cuboids.length - index].classList.add("active");
+      }
+
+      textElements.forEach((textElement, i) => {
+        if (i !== (index === 0 ? 0 : cuboids.length - index)) {
+          if (textElement.classList.contains("slide-in")) {
+            textElement.classList.remove("slide-in");
+            textElement.classList.add("slide-left");
+            textElement.style.opacity = "0.5";
+          }
+        }
+      });
+
+      let currentTextElement =
+        index === 0 ? textElements[0] : textElements[cuboids.length - index];
+      currentTextElement.classList.remove("slide-left");
+      currentTextElement.classList.add("slide-in");
+      currentTextElement.style.display = "block";
+
+      applyFastClick(getButtonForIndex(index));
+    });
+  });
+
+  document.addEventListener("mouseup", function () {
+    buttons.forEach((btn) => btn.classList.remove("pressed"));
+  });
 
   buttons.forEach((button, index) => {
     button.addEventListener("click", function () {
       handleClick(index);
     });
   });
-
-  rotateSlider();
 
   function updateSlideStyles() {
     const all = cuboids.length;
@@ -186,79 +281,6 @@ document.addEventListener("DOMContentLoaded", function () {
         cuboid.style.transform = `translate3d(${myR * Math.sin(rad)}px, 0, ${
           myR * Math.cos(rad)
         }px) rotateY(${i * step}deg)`;
-
-        cuboids.forEach((cuboid, i) => {
-          cuboid.addEventListener("mousedown", function () {
-            console.log(
-              `Cuboid mousedown: Index ${i}, Rotation Angle: ${rotationAngle}`
-            );
-
-            buttons.forEach((btn) => btn.classList.remove("pressed"));
-
-            if (i === 0) {
-              buttons[0].classList.add("pressed");
-            } else {
-              buttons[cuboids.length - i].classList.add("pressed");
-            }
-          });
-
-          document.addEventListener("mouseup", function () {
-            buttons.forEach((btn) => btn.classList.remove("pressed"));
-          });
-
-          cuboid.addEventListener("click", function () {
-            const totalSlides = cuboids.length;
-
-            const targetAngle = (360 / totalSlides) * (totalSlides - i);
-
-            const angleDiff = getShortestAngleDiff(rotationAngle, targetAngle);
-
-            if (angleDiff > 0) {
-              rotationDirection = 1;
-            } else if (angleDiff < 0) {
-              rotationDirection = -1;
-            }
-
-            rotationAngle += angleDiff;
-
-            document.querySelector(
-              ".slider3d_wrap"
-            ).style.transform = `translateZ(-401.363px) rotateY(${rotationAngle}deg)`;
-
-            console.log(
-              `Cuboid clicked: Target Index: ${i}, Target Angle: ${targetAngle}, Angle Diff: ${angleDiff}, Rotation Direction: ${rotationDirection}, Updated Rotation: ${rotationAngle}`
-            );
-
-            buttons.forEach((btn) => btn.classList.remove("active"));
-
-            if (i === 0) {
-              buttons[0].classList.add("active");
-            } else {
-              buttons[cuboids.length - i].classList.add("active");
-            }
-
-            textElements.forEach((textElement) => {
-              textElement.classList.remove("slide-in");
-              textElement.classList.add("slide-left");
-              textElement.style.opacity = "0.5";
-              textElement.style.display = "none";
-            });
-
-            if (i === 0) {
-              textElements[0].classList.remove("slide-left");
-              textElements[0].classList.add("slide-in");
-              textElements[0].style.opacity = "1";
-              textElements[0].style.display = "block";
-            } else {
-              textElements[cuboids.length - i].classList.remove("slide-left");
-              textElements[cuboids.length - i].classList.add("slide-in");
-              textElements[cuboids.length - i].style.opacity = "1";
-              textElements[cuboids.length - i].style.display = "block";
-            }
-
-            updateSlideStyles();
-          });
-        });
       }
     }
 

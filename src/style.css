@@ -260,18 +260,14 @@ section {
   color: #fff;
   cursor: pointer;
   box-sizing: border-box;
-  border: 1px solid transparent;
-  background: linear-gradient(rgb(144, 15, 55), rgb(144, 15, 55)) padding-box,
-    linear-gradient(
-        90deg,
-        rgb(232, 232, 232),
-        rgb(177, 177, 177) 19%,
-        rgb(232, 232, 232) 50%,
-        rgb(164, 164, 164) 76%,
-        rgb(232, 232, 232)
-      )
-      border-box;
-  background-clip: padding-box, border-box;
+
+  background: rgba(255, 255, 255, 0.03);
+
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid #737373;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -559,8 +555,8 @@ section {
   width: 356px;
   height: 214px;
   transform: rotateY(0deg);
-
   user-select: none;
+  box-sizing: border-box;
 }
 
 .cuboid__side {
@@ -568,6 +564,10 @@ section {
   background-color: #473f3f;
   border-width: 0vmin;
   border-radius: 6px;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: transform 0.3s ease, border-radius 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .cuboid__side:nth-of-type(1) {
@@ -576,6 +576,8 @@ section {
   top: 0;
   transform: translate(0, -50%) rotateX(90deg);
   background: var(--shade-one);
+  border-radius: 6px;
+  margin: 2px;
 }
 
 .cuboid__side:nth-of-type(2) {
@@ -585,6 +587,7 @@ section {
   right: 0;
   transform: translate(50%, -50%) rotateY(90deg);
   background: var(--shade-two);
+  border-radius: 6px;
 }
 
 .cuboid__side:nth-of-type(3) {
@@ -593,7 +596,9 @@ section {
   bottom: 0;
   opacity: 0;
   transform: translate(0%, 50%) rotateX(90deg);
-  background-image: var(--shade-two);
+  background: var(--shade-two);
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .cuboid__side:nth-of-type(4) {
@@ -603,6 +608,7 @@ section {
   left: 0;
   transform: translate(-50%, -50%) rotateY(90deg);
   background: var(--shade-two);
+  border-radius: 6px;
 }
 
 .cuboid__side:nth-of-type(5) {
@@ -611,9 +617,10 @@ section {
   top: 0;
   left: 0;
   transform: translate3d(0, 0, calc(var(--thickness) * 0.5vmin));
-  background-image: url(/public/img/government.png);
+  background-image: url("/public/img/government.png");
   background-size: cover;
   background-position: center;
+  border-radius: 6px;
 }
 
 .cuboid__side:nth-of-type(6) {
@@ -624,180 +631,64 @@ section {
   transform: translate3d(0, 0, calc(var(--thickness) * -0.5vmin))
     rotateY(180deg);
   background: var(--shade-one);
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-#img1 .cuboid__side:nth-of-type(5) {
-  background-image: url("img/busines.png");
+.cuboid__side:nth-of-type(6)::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: inherit;
   background-size: cover;
   background-position: center;
+  opacity: 0.2;
+  transform: scaleX(-1);
+  z-index: -1;
+  border-radius: 6px;
 }
 
-#img2 .cuboid__side:nth-of-type(5) {
-  background-image: url("img/government.png");
-  background-size: cover;
-  background-position: center;
-}
-
-#img3 .cuboid__side:nth-of-type(5) {
-  background-image: url("img/medicine.png");
-  background-size: cover;
-  background-position: center;
-}
-
-#img4 .cuboid__side:nth-of-type(5) {
-  background-image: url("img/translaters.png");
-  background-size: cover;
-  background-position: center;
-}
-
-#img5 .cuboid__side:nth-of-type(5) {
-  background-image: url("img/jurisprudence.png");
-  background-size: cover;
-  background-position: center;
-}
-
-#img6 .cuboid__side:nth-of-type(5) {
-  background-image: url("img/journalists.png");
-  background-size: cover;
-  background-position: center;
-}
-
-#img7 .cuboid__side:nth-of-type(5) {
-  background-image: url("img/call.png");
-  background-size: cover;
-  background-position: center;
-}
-
-#img8 .cuboid__side:nth-of-type(5) {
-  background-image: url("img/students.png");
-  background-size: cover;
-  background-position: center;
-}
-
-#img1 .cuboid__side:nth-of-type(6) {
-  position: relative;
-  overflow: hidden; /* Это нужно, чтобы псевдо-элемент не выходил за пределы родительского блока */
-}
-
+#img1 .cuboid__side:nth-of-type(5),
 #img1 .cuboid__side:nth-of-type(6)::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background-image: url("img/busines.png");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.2;
-  transform: scaleX(-1); /* зеркалируем изображение */
-  z-index: -1; /* Чтобы псевдо-элемент был под содержимым */
 }
 
-/* Повторяем для остальных изображений */
+#img2 .cuboid__side:nth-of-type(5),
 #img2 .cuboid__side:nth-of-type(6)::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background-image: url("img/government.png");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.2;
-  transform: scaleX(-1);
-  z-index: -1;
 }
 
+#img3 .cuboid__side:nth-of-type(5),
 #img3 .cuboid__side:nth-of-type(6)::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background-image: url("img/medicine.png");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.2;
-  transform: scaleX(-1);
-  z-index: -1;
 }
 
+#img4 .cuboid__side:nth-of-type(5),
 #img4 .cuboid__side:nth-of-type(6)::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background-image: url("img/translaters.png");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.2;
-  transform: scaleX(-1);
-  z-index: -1;
 }
 
+#img5 .cuboid__side:nth-of-type(5),
 #img5 .cuboid__side:nth-of-type(6)::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background-image: url("img/jurisprudence.png");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.2;
-  transform: scaleX(-1);
-  z-index: -1;
 }
 
+#img6 .cuboid__side:nth-of-type(5),
 #img6 .cuboid__side:nth-of-type(6)::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background-image: url("img/journalists.png");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.2;
-  transform: scaleX(-1);
-  z-index: -1;
 }
 
+#img7 .cuboid__side:nth-of-type(5),
 #img7 .cuboid__side:nth-of-type(6)::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background-image: url("img/call.png");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.2;
-  transform: scaleX(-1);
-  z-index: -1;
 }
 
+#img8 .cuboid__side:nth-of-type(5),
 #img8 .cuboid__side:nth-of-type(6)::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background-image: url("img/students.png");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.2;
-  transform: scaleX(-1);
-  z-index: -1;
 }
 
 .slider-btn {
@@ -858,7 +749,7 @@ section {
   color: #4a738c;
 }
 
-.slider-btn.active:not(.fast-click) .btn-text {
+.slider-btn.active .btn-text {
   color: #37779d;
 }
 
@@ -903,6 +794,14 @@ section {
     inset -2px -2px 2px 0 rgba(0, 0, 0, 0.2);
   background: #20272b;
 }
+.slider-btn.fast-click .btn-text {
+  transform: scale(0.95);
+}
+.slider-btn.fast-click:active .btn-text {
+  transform: scale(0.95);
+  color: #4a738c;
+}
+
 .pressed {
   box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.2),
     inset -2px -2px 2px 0 rgba(0, 0, 0, 0.2);
