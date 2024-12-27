@@ -67,22 +67,24 @@ document.querySelectorAll(".card-wrap").forEach((card) => {
 });
 
 window.onload = function () {
-  const cards = document.querySelectorAll(".card");
+  const buyButtons = document.getElementsByClassName("card");
+  const sliderBtns = document.getElementsByClassName("slider-btn");
 
-  const addMouseEffect = (elements) => {
-    elements.forEach((element) => {
-      element.addEventListener("mousemove", (e) => {
-        const rect = element.getBoundingClientRect();
+  const addMouseEffect = (buttons) => {
+    for (const button of buttons) {
+      button.onmousemove = (e) => {
+        const rect = button.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        element.style.setProperty("--mouse-x", `${x}px`);
-        element.style.setProperty("--mouse-y", `${y}px`);
-      });
-    });
+        button.style.setProperty("--mouse-x", `${x}px`);
+        button.style.setProperty("--mouse-y", `${y}px`);
+      };
+    }
   };
 
-  addMouseEffect(cards);
+  addMouseEffect(buyButtons);
+  addMouseEffect(sliderBtns);
 };
 
 export { makeButtonClickable };

@@ -334,48 +334,8 @@ section {
     transparent 30%
   );
 }
-.card:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
 
-  --size: calc(100% - var(--shadow-size) * 1);
-  --position: 2px;
-  --space: calc(var(--position) * 2);
-
-  height: var(--size);
-  background: radial-gradient(
-      circle at var(--position) var(--position),
-      white calc(var(--position) / 4),
-      transparent 0
-    )
-    padding-box;
-  background-size: var(--space) var(--space);
-  background-repeat: space;
-
-  mask-image: radial-gradient(
-    30px circle at var(--mouse-x) var(--mouse-y),
-    black,
-    transparent 80%
-  );
-  -webkit-mask-image: radial-gradient(
-    90px circle at var(--mouse-x) var(--mouse-y),
-    black,
-    transparent 80%
-  );
-  opacity: 0;
-}
-
-.card:hover::before,
-.card:hover:after {
+.card:hover::before {
   opacity: 1;
 }
 
